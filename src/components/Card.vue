@@ -18,8 +18,7 @@
                 </v-col>
                 <v-spacer/>
                 <v-col class="manacost_container">
-                    <ManaCost/>
-                    <ManaCost/>
+                    <ManaCost :cost="carddata.mana_cost"/>
                 </v-col>
             </v-row>
         </v-container>
@@ -60,6 +59,7 @@ export default {
 
 .card_slug .col {
     padding: 0;
+    flex-basis: unset;
     width: inherit;
 }
 
