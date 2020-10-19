@@ -27,6 +27,20 @@
 
       <v-spacer></v-spacer>
 
+      <v-autocomplete
+          v-model="select"
+          :loading="loading"
+          :items="items"
+          :search-input.sync="search"
+          cache-items
+          class="mx-4"
+          flat
+          hide-no-data
+          hide-details
+          label="Search Cards"
+          solo-inverted
+      ></v-autocomplete>
+
     </v-app-bar>
 
     <v-main>
@@ -46,7 +60,9 @@ export default {
   },
 
   data: () => ({
-    //
+    loading: false,
+    items: [],
+    search: null,
   }),
 };
 </script>
