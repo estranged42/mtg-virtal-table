@@ -36,9 +36,6 @@ export default {
         select: null,
         inputWait: false,
     }),
-    created() {
-        // this.searchCards("dingus egg")
-    },
     watch: {
       search (val) {
         if (val && !this.inputWait && val.length >= 3 && val !== this.select) {
@@ -46,7 +43,6 @@ export default {
             this.inputWait = true
             window.setTimeout(this.resetInputWait, 1000, this)
         }
-        // val && length(val) >= 3 && val !== this.select  && this.searchCards(val)
       },
     },
     methods: {
