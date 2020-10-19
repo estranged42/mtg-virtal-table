@@ -24,18 +24,41 @@ export default {
         items: [],
         search: null,
         select: null,
+        inputWait: false,
     }),
     created() {
-        this.searchCards()
+        // this.searchCards("dingus egg")
+    },
+    watch: {
+      search (val) {
+        if (val && !this.inputWait && val.length >= 3 && val !== this.select) {
+            console.log(val)
+            this.inputWait = true
+            window.setTimeout(this.resetInputWait, 1000, this)
+        }
+        // val && length(val) >= 3 && val !== this.select  && this.searchCards(val)
+      },
     },
     methods: {
-        searchCards: function() {
+        resetInputWait: function(scope) {
+            scope.inputWait = false
+            scope.searchCards(scope.search)
+        },
+        searchCards: function(searchText) {
+            this.items = []
             let api_url = process.env.VUE_APP_CARD_API_URL
-            let call_url = `${api_url}/cards/search?q=armaged`
+            let call_url = `${api_url}/cards/search?q=${searchText}`
+            call_url = encodeURI(call_url)
             axios
                 .get(call_url)
                 .then(response => {
                     let data = response.data
+                    if (data.total_cards > 0) {
+                        let cards = data.data
+                        cards.forEach(element => (function(scope){
+                            scope.items = scope.items.concat(element.name)
+                        })(this));
+                    }
                     console.log(data)
                 })
                 .catch(err => {
