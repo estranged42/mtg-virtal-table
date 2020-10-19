@@ -9,16 +9,27 @@
         flat
         hide-no-data
         hide-details
+        item-text="name"
+        item-value="oracle_id"
         label="Search Cards"
         solo-inverted
-    ></v-autocomplete>
+    >
+    <template v-slot:item="data">
+        <Card v-bind:carddata="data.item"/>
+    </template>
+    
+    </v-autocomplete>
     
 </template>
 
 <script>
 const axios = require('axios').default;
+import Card from './Card';
 
 export default {
+    components: {
+        Card,
+    },
     data: () => ({
         loading: false,
         items: [],
@@ -56,7 +67,7 @@ export default {
                     if (data.total_cards > 0) {
                         let cards = data.data
                         cards.forEach(element => (function(scope){
-                            scope.items = scope.items.concat(element.name)
+                            scope.items = scope.items.concat(element)
                         })(this));
                     }
                     console.log(data)
