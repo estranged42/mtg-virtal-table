@@ -27,19 +27,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-autocomplete
-          v-model="select"
-          :loading="loading"
-          :items="items"
-          :search-input.sync="search"
-          cache-items
-          class="mx-4"
-          flat
-          hide-no-data
-          hide-details
-          label="Search Cards"
-          solo-inverted
-      ></v-autocomplete>
+      <CardSearch/>
 
     </v-app-bar>
 
@@ -51,18 +39,18 @@
 
 <script>
 import Table from './components/Table';
+import CardSearch from './components/CardSearch'
 
 export default {
   name: 'App',
 
   components: {
     Table,
+    CardSearch,
   },
 
   data: () => ({
-    loading: false,
-    items: [],
-    search: null,
+
   }),
 };
 </script>
