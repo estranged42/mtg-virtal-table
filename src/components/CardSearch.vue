@@ -4,8 +4,6 @@
         :loading="loading"
         :items="items"
         :search-input.sync="search"
-        class="mx-4"
-        flat
         hide-no-data
         hide-details
         item-text="name"
@@ -13,10 +11,12 @@
         label="Search Cards"
         solo-inverted
     >
-    <template v-slot:item="data">
-        <Card v-bind:carddata="data.item"/>
-    </template>
-    
+        <template v-slot:selection="data">
+            <Card v-bind:carddata="data.item"/>
+        </template>
+        <template v-slot:item="data">
+            <Card v-bind:carddata="data.item"/>
+        </template>
     </v-autocomplete>
     
 </template>
@@ -39,7 +39,6 @@ export default {
     watch: {
       search (val) {
         if (val && !this.inputWait && val.length >= 3 && val !== this.select) {
-            console.log(val)
             this.inputWait = true
             window.setTimeout(this.resetInputWait, 1000, this)
         }
@@ -55,6 +54,7 @@ export default {
             let api_url = process.env.VUE_APP_CARD_API_URL
             let call_url = `${api_url}/cards/search?q=${searchText}`
             call_url = encodeURI(call_url)
+            this.loading = true
             axios
                 .get(call_url)
                 .then(response => {
@@ -65,6 +65,7 @@ export default {
                             scope.items = scope.items.concat(element)
                         })(this));
                     }
+                    this.loading = false
                     console.log(data)
                 })
                 .catch(err => {

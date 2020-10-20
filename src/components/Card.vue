@@ -5,33 +5,17 @@
         content-class="card_wrapper"
     >
         <template v-slot:activator="{ on, attrs }">
-            <v-card
-                width="300"
-                outlined
-                class="card_slug"
+            <v-chip
+                light
                 v-bind="attrs"
                 v-on="on"
+                class="card_chip"
+                draggable
             >
-                <v-container>
-                    <v-row
-                        no-gutters
-                        align="center"
-                        align-content="center"
-                    >
-                        <v-col>
-                            <v-card-title
-                                class="card_title"
-                                v-text="carddata.name"
-                            ></v-card-title>
-                        </v-col>
-                        <v-spacer/>
-                        <v-col class="manacost_container">
-                            <ManaCost :cost="carddata.mana_cost"/>
-                        </v-col>
-                    </v-row>
-                </v-container>
-                
-            </v-card>
+                {{ carddata.name }}
+                <ManaCost :cost="carddata.mana_cost"/>
+            </v-chip>
+            
         </template>
         <v-card
             class="card_details"
@@ -49,10 +33,12 @@
                     </v-card-text>
                 </div>
 
-                <v-img :src="carddata.image_uris.png" width=250></v-img>
+                <v-img 
+                    :src="carddata.image_uris.png"
+                    :lazy-src="carddata.image_uris.small"
+                    max-width=250
+                ></v-img>
             </div>
-
-            
         </v-card>
     </v-tooltip>
 </template>
@@ -74,42 +60,29 @@ export default {
     padding: 0 5px;
 }
 
-.card_slug {
+.card_chip {
+    width: 300px;
+
+}
+
+.card_chip .v-chip__content {
+    width: 100%;
     position: relative;
 }
 
-.card_slug .card_title {
+.card_chip .card_title {
     font-size: 1rem;
     padding: 0;
 }
 
-.card_slug .container {
-    padding: 0;
-}
-
-.card_slug .row {
-    padding: 2px 8px;
-}
-
-.card_slug .col {
-    padding: 0;
-    flex-basis: unset;
-    width: inherit;
-}
-
-.card_slug .manacost_container {
-    flex-grow: unset;
-    flex-basis: unset;
+.card_chip .mana_costs_container {
+    position: absolute;
+    right: 0px;
     line-height: 1;
 }
 
 .v-tooltip__content.card_wrapper {
     background: none;
-}
-
-.card_details {
-    position: absolute;
-    z-index: 100;
 }
 
 </style>

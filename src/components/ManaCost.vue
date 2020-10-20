@@ -1,5 +1,5 @@
 <template>
-    <span>
+    <span class="mana_costs_container">
         <div 
             v-for="m in mana_costs"
             :key="m"
@@ -16,18 +16,20 @@ export default {
         mana_costs: []
     }),
     created() {
-        console.log(this.cost)
         const regex = /([0-9WBRGU]+)/g;
         let matches = this.cost.match(regex)
         matches.forEach(element => (function(scope){
             scope.mana_costs = scope.mana_costs.concat(`mana_cost mana_icon_${element}`)
         })(this));
-        console.log(this.mana_costs)
     },
 }
 </script>
 
 <style>
+
+.mana_costs_container {
+    line-height: 0;
+}
 
 .mana_cost {
     height: 16px;
