@@ -3,6 +3,7 @@
     <v-tooltip 
         bottom
         content-class="card_wrapper"
+        open-delay="600"
     >
         <template v-slot:activator="{ on, attrs }">
             <v-chip
@@ -62,7 +63,7 @@ export default {
 
 .card_chip {
     width: 300px;
-
+    margin: 2px 0;
 }
 
 .card_chip .v-chip__content {

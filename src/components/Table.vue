@@ -4,6 +4,7 @@
         class="players"
         @insert="onInsert"
         @reorder="onReorder"
+        :column=true
     >
         <template v-slot:item="{item}">
             <drag class="item" :key="item.id">
@@ -26,8 +27,10 @@ export default {
     },
     data: () => ({
         players: [
-            {id: 2, name: "Eric"},
             {id: 1, name: "Mark"},
+            {id: 4, name: "Angela"},
+            {id: 5, name: "Kirin"},
+            {id: 6, name: "Darla"},
         ]
     }),
     methods: {
@@ -45,6 +48,11 @@ export default {
 
 .players {
     margin: 5px;
+
+    .item {
+        display: inline-block;
+        margin: 15px;
+    }
 }
 
 </style>
