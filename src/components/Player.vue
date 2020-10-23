@@ -1,9 +1,6 @@
 <template>
     <v-card
         class="player-card"
-        max-width="600"
-        min-width="300"
-        min-height="300"
     >
         <v-toolbar
             color="indigo"
@@ -16,12 +13,19 @@
             class="cards"
             @insert="onInsert"
             @reorder="onReorder"
-            :column=true
+            :column="true"
+            mode="cut"
         >
             <template v-slot:item="{item}">
-                <drag class="item" :key="item.id">
+                <drag class="item" :key="item.table_card_id" :data="item" @cut="remove(item)">
                     <Card v-bind:carddata="item"/>
                 </drag>
+            </template>
+            <template v-slot:feedback="{data}">
+                <div class="item feedback" :key="data.table_card_id"></div>
+            </template>
+            <template v-slot:reordering-feedback="{}">
+                <div class="reordering-feedback" key="feedback"/>
             </template>
         </drop-list>
     </v-card>
@@ -39,10 +43,11 @@ export default {
         Drag,
         DropList
     },
-    data: () => ({
+    data: (scope) => ({
         cards: [
             {
                 "object": "card",
+                "table_card_id": scope.$parent.getCardId(),
                 "id": "77f1f6ac-983f-4f3e-8906-47f774e8367b",
                 "oracle_id": "c9ed8b01-959a-47d6-891e-0abbdccf6e4f",
                 "name": "Armageddon",
@@ -59,6 +64,7 @@ export default {
             },
             {
                 "object": "card",
+                "table_card_id": scope.$parent.getCardId(),
                 "id": "ab55bb84-03c2-4989-8db4-0d5578ea0431",
                 "oracle_id": "70d90ef4-0cda-405f-abf1-734fa909efa6",
                 "name": "Armageddon Clock",
@@ -81,6 +87,10 @@ export default {
         },
         onReorder(event) {
             event.apply(this.cards)
+        },
+        remove(value) {
+            let index = this.cards.indexOf(value);
+            this.cards.splice(index, 1);
         }
     }
 }
@@ -91,6 +101,27 @@ export default {
 .cards {
     padding: 5px;
     border: 1px solid black;
+    min-height: 75px;
+
+    .item {
+        display: inline-block;
+    }
 }
+
+.reordering-feedback {
+    width: 50px;
+    height: 30px;
+    margin: 2px;
+  border: 1px solid red;
+}
+
+.feedback {
+    width: 50px;
+    height: 30px;
+    margin: 2px;
+  border: 1px solid blue;
+}
+
+
 
 </style>

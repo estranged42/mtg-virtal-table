@@ -63,7 +63,7 @@ export default {
 
 .card_chip {
     width: 300px;
-    margin: 2px 0;
+    margin: 2px;
 }
 
 .card_chip .v-chip__content {
