@@ -9,10 +9,13 @@
         item-text="name"
         item-value="oracle_id"
         label="Search Cards"
+        @change="onChange"
         solo-inverted
     >
         <template v-slot:selection="data">
-            <Card v-bind:carddata="data.item"/>
+            <drag :key="data.item.table_card_id" :data="data.item" @dragstart="onDragStart" @cut="onCut">
+                <Card v-bind:carddata="data.item"/>
+            </drag>
         </template>
         <template v-slot:item="data">
             <Card v-bind:carddata="data.item"/>
@@ -23,11 +26,13 @@
 
 <script>
 const axios = require('axios').default;
+import { Drag } from "vue-easy-dnd";
 import Card from './Card';
 
 export default {
     components: {
         Card,
+        Drag,
     },
     data: () => ({
         loading: false,
@@ -62,11 +67,12 @@ export default {
                     if (data.total_cards > 0) {
                         let cards = data.data
                         cards.forEach(element => (function(scope){
+                            element.table_card_id = scope.getCardId()
+                            console.log(element)
                             scope.items = scope.items.concat(element)
                         })(this));
                     }
                     this.loading = false
-                    console.log(data)
                 })
                 .catch(err => {
                     this.loading = false
@@ -87,6 +93,16 @@ export default {
                     console.log(err)
                     }
                 })
+        },
+        onChange: function(key) {
+            console.log(this)
+            console.log(key)
+        },
+        onDragStart: (event) => {
+          console.log(event);
+        },
+        onCut: (event) => {
+            console.log(event)
         }
     }
 }
