@@ -20,7 +20,6 @@ export default {
         //DropList
     },
     data: () => ({
-        next_card_id: 1,
         players: [
             {id: 1, name: "Mark"},
             {id: 4, name: "Angela"},
@@ -29,11 +28,6 @@ export default {
         ]
     }),
     methods: {
-        getCardId() {
-            let id = this.next_card_id
-            this.next_card_id = id + 1
-            return id
-        },
         onInsert(event) {
             this.players.splice(event.index, 0, event.data);
         },
