@@ -18,9 +18,11 @@ export default {
     created() {
         const regex = /([0-9WBRGU]+)/g;
         let matches = this.cost.match(regex)
-        matches.forEach(element => (function(scope){
-            scope.mana_costs = scope.mana_costs.concat(`mana_cost mana_icon_${element}`)
-        })(this));
+        if (matches) {
+            matches.forEach(element => (function(scope){
+                scope.mana_costs = scope.mana_costs.concat(`mana_cost mana_icon_${element}`)
+            })(this));
+        }
     },
 }
 </script>
