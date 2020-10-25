@@ -5,29 +5,19 @@
       color="primary"
       dark
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+      <v-toolbar-title>MTG: Virtual Table</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <CardSearch/>
+      <v-btn icon>
+        <v-icon>mdi-account-plus</v-icon>
+      </v-btn>
+
+      <v-spacer></v-spacer>
+
+      <div class="card-search">
+        <CardSearch/>
+      </div>
 
     </v-app-bar>
 
@@ -54,3 +44,11 @@ export default {
   }),
 };
 </script>
+
+<style lang="scss" scoped>
+
+.card-search {
+  width: 400px;
+}
+
+</style>
