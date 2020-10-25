@@ -40,7 +40,7 @@
         >
             <template v-slot:item="{item}">
                 <drag class="item" :key="item.table_card_id" :data="item" @cut="remove(item)">
-                    <Card v-bind:carddata="item"/>
+                    <Card v-bind:carddata="item" :closefn="remove"/>
                 </drag>
             </template>
             <template v-slot:feedback="{data}">

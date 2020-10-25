@@ -11,7 +11,8 @@
                 v-bind="attrs"
                 v-on="on"
                 class="card_chip"
-                draggable
+                :close="closable"
+                @click:close="doClose"
             >
                 {{ carddata.name }}
                 <ManaCost :cost="carddata.mana_cost"/>
@@ -48,9 +49,27 @@
 import ManaCost from './ManaCost';
 
 export default {
-    props: ['carddata'],
+    props: {
+        carddata: undefined,
+        closefn: undefined   
+    },
     components: {
         ManaCost,
+    },
+    data: () => ({
+        closable: false
+    }),
+    created() {
+        if (this.closefn != undefined) {
+            this.closable = true
+        }
+    },
+    methods: {
+        doClose() {
+            if (this.closefn != undefined) {
+                this.closefn(this.carddata)
+            }
+        }
     }
 }
 </script>
@@ -62,7 +81,6 @@ export default {
 }
 
 .card_chip {
-    width: 300px;
     margin: 2px;
 }
 
@@ -77,9 +95,8 @@ export default {
 }
 
 .card_chip .mana_costs_container {
-    position: absolute;
-    right: 0px;
-    line-height: 1;
+    line-height: 0;
+    margin: 0px 5px;
 }
 
 .v-tooltip__content.card_wrapper {
