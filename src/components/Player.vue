@@ -6,7 +6,29 @@
             color="indigo"
             dark
         >
-            <v-toolbar-title>{{ player.name }}</v-toolbar-title>
+            <v-toolbar-title 
+                v-if="!editingPlayerName"
+                @click="doEditPlayerName"
+            >
+                {{ player.name }}
+            </v-toolbar-title>
+            <v-toolbar-title 
+                v-if="editingPlayerName"
+                class="toolbar-title-edit"
+            >
+                <v-text-field
+                    class="edit-field"
+                    v-model="player.name"
+                    label="Press enter to save"
+                    placeholder="Player Name"
+                    outlined
+                    dense
+                    hide-details="true"
+                    @keydown.enter="endEditPlayerName"
+                    @blur="endEditPlayerName"
+                    ref="playerNameEditField"
+                ></v-text-field>
+            </v-toolbar-title>
         </v-toolbar>
         <drop-list
             :items="cards"
@@ -46,7 +68,8 @@ export default {
         DropList
     },
     data: () => ({
-        cards: []
+        cards: [],
+        editingPlayerName: false,
     }),
     methods: {
         onInsert(event) {
@@ -58,6 +81,16 @@ export default {
         remove(value) {
             let index = this.cards.indexOf(value);
             this.cards.splice(index, 1);
+        },
+        doEditPlayerName() {
+            this.editingPlayerName = true
+            this.$nextTick(() => {
+                let el = this.$refs.playerNameEditField
+                el.focus()
+            });
+        },
+        endEditPlayerName() {
+            this.editingPlayerName = false
         }
     }
 }
@@ -75,5 +108,11 @@ export default {
     }
 }
 
+.player-card {
+    .edit-field,
+    .toolbar-title-edit {
+        overflow: visible;
+    }
+}
 
 </style>
