@@ -68,6 +68,20 @@
 
                 <v-spacer></v-spacer>
 
+                <v-input
+                    v-model="health"
+                    class="health"
+                    append-icon="mdi-plus-circle"
+                    prepend-icon="mdi-minus-circle"
+                    @click:append="health+=1"
+                    @click:prepend="health-=1"
+                    hide-details
+                    >
+                    {{health}}
+                </v-input>
+
+                <v-spacer></v-spacer>
+
                 <v-btn
                     icon
                     @click.stop="dialog = true"
@@ -118,6 +132,7 @@ export default {
         cards: [],
         editingPlayerName: false,
         dialog: false,
+        health: 20,
     }),
     methods: {
         onInsert(event) {
@@ -148,7 +163,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 .cards {
     padding: 5px;
@@ -164,6 +179,17 @@ export default {
     .edit-field,
     .toolbar-title-edit {
         overflow: visible;
+    }
+}
+
+.health {
+    .v-input__control {
+        flex-grow: unset;
+        width: unset;
+    }
+
+    .v-input__slot {
+        font-size: 1.3em;
     }
 }
 
