@@ -5,10 +5,10 @@
         <v-toolbar
             color="indigo"
             dark
+            @click="doEditPlayerName"
         >
             <v-toolbar-title 
                 v-if="!editingPlayerName"
-                @click="doEditPlayerName"
             >
                 {{ player.name }}
             </v-toolbar-title>
