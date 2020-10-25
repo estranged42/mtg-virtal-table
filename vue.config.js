@@ -7,5 +7,9 @@ module.exports = {
   },
   "transpileDependencies": [
     "vuetify"
-  ]
+  ],
+  configureWebpack: {
+    mode: 'development',
+    devtool: 'inline-source-map'
+  }
 }
