@@ -9,7 +9,10 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <v-btn
+        icon
+        @click="addPlayer"
+      >
         <v-icon>mdi-account-plus</v-icon>
       </v-btn>
 
@@ -22,7 +25,7 @@
     </v-app-bar>
 
     <v-main>
-      <Table/>
+      <Table :players="players"/>
     </v-main>
   </v-app>
 </template>
@@ -40,8 +43,19 @@ export default {
   },
 
   data: () => ({
-
+    players: [
+        {id: 1, name: "Player One"},
+        {id: 2, name: "Player Two"},
+    ],
+    nextPlayerId: 3,
   }),
+  methods: {
+    addPlayer() {
+      let p = {id: this.nextPlayerId, name: "New Player"}
+      this.players = this.players.concat(p)
+      this.nextPlayerId = this.nextPlayerId + 1
+    },
+  }
 };
 </script>
 
