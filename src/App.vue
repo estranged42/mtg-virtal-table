@@ -46,7 +46,7 @@
 
     </v-navigation-drawer>
 
-    <v-main>
+    <v-main class="main-table">
       <Table :players="players"/>
     </v-main>
   </v-app>
@@ -85,6 +85,10 @@ export default {
 
 .card-search {
   width: 400px;
+}
+
+.main-table {
+  background-color: #9eabae;
 }
 
 </style>
