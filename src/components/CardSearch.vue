@@ -1,26 +1,33 @@
 <template>
-    <v-autocomplete
-        v-model="select"
-        :loading="loading"
-        :items="items"
-        :search-input.sync="search"
-        hide-no-data
-        hide-details
-        item-text="name"
-        item-value="oracle_id"
-        label="Search Cards"
-        @change="onChange"
-        solo-inverted
-    >
-        <template v-slot:selection="data">
-            <drag :key="data.item.table_card_id" :data="data.item" @dragstart="onDragStart" @cut="onCut">
-                <Card v-bind:carddata="data.item"/>
-            </drag>
-        </template>
-        <template v-slot:item="data">
-            <Card v-bind:carddata="data.item"/>
-        </template>
-    </v-autocomplete>
+    <div>
+        <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            :loading="loading"
+            loader-height="5"
+            ref="cardsearchfield"
+            single-line
+            hide-details
+        ></v-text-field>
+
+        <v-simple-table
+            height="300"
+        >
+            <template v-slot:default>
+                <tr
+                    v-for="item in items"
+                    :key="item.oracle_id"
+                >
+                    <td>
+                        <drag :key="item.table_card_id" :data="item" @dragstart="onDragStart" @cut="onCut">
+                            <Card v-bind:carddata="item"/>
+                        </drag>
+                    </td>
+                </tr>
+            </template>
+        </v-simple-table>
+    </div>
     
 </template>
 
@@ -40,6 +47,7 @@ export default {
         search: null,
         select: null,
         inputWait: false,
+        headers: [{ text: 'Card', value: 'card' }]
     }),
     watch: {
       search (val) {
@@ -68,10 +76,11 @@ export default {
                         let cards = data.data
                         cards.forEach(element => (function(scope){
                             element.table_card_id = scope.getCardId()
-                            console.log(element)
+                            // console.log(element)
                             scope.items = scope.items.concat(element)
                         })(this));
                     }
+                    this.search = ""
                     this.loading = false
                 })
                 .catch(err => {
@@ -93,10 +102,6 @@ export default {
                     console.log(err)
                     }
                 })
-        },
-        onChange: function(key) {
-            console.log(this)
-            console.log(key)
         },
         onDragStart: (event) => {
           console.log(event);
