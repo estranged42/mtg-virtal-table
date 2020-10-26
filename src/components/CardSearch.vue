@@ -81,7 +81,6 @@ export default {
                             scope.items = scope.items.concat(element)
                         })(this));
                     }
-                    this.search = ""
                     this.loading = false
                 })
                 .catch(err => {
@@ -94,7 +93,8 @@ export default {
                     } else if (err.response.status == 403) {
                         this.setError("The requested token has expired.")
                     } else {
-                        this.etError("Something went wrong trying to retrive credentials.")
+                        console.log(err)
+                        this.setError("Something went wrong.")
                     }
                     } else if (err.request) {
                     console.log("request error")
@@ -109,6 +109,9 @@ export default {
         },
         onCut: (event) => {
             console.log(event)
+        },
+        setError: (errText) => {
+            console.log(errText)
         }
     }
 }
