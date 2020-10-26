@@ -1,7 +1,7 @@
 <template>
 
     <v-tooltip 
-        bottom
+        right
         content-class="card_wrapper"
         open-delay="600"
     >
