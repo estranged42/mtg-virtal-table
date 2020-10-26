@@ -41,10 +41,10 @@
             <v-toolbar
                 color="indigo"
                 dark
-                @click="doEditPlayerName"
             >
                 <v-toolbar-title 
                     v-if="!editingPlayerName"
+                    @click.self="doEditPlayerName"
                 >
                     {{ player.name }}
                 </v-toolbar-title>
@@ -68,17 +68,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-input
-                    v-model="health"
-                    class="health"
-                    append-icon="mdi-plus-circle"
-                    prepend-icon="mdi-minus-circle"
-                    @click:append="health+=1"
-                    @click:prepend="health-=1"
-                    hide-details
-                    >
-                    {{health}}
-                </v-input>
+                <Stepper :count="health" icon="mdi-heart" iconoffset="2"/>
 
                 <v-spacer></v-spacer>
 
@@ -120,11 +110,13 @@
 <script>
 import { Drag, DropList } from "vue-easy-dnd";
 import Card from './Card';
+import Stepper from './Stepper';
 
 export default {
     props: ['player', 'deleteHandler'],
     components: {
         Card,
+        Stepper,
         Drag,
         DropList
     },
@@ -132,7 +124,7 @@ export default {
         cards: [],
         editingPlayerName: false,
         dialog: false,
-        health: 20,
+        health: {val: 20},
     }),
     methods: {
         onInsert(event) {
