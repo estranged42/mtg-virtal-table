@@ -36,6 +36,14 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item
+          >
+            <v-list-item-content>
+              <Counter />
+            </v-list-item-content>
+          </v-list-item>
+
+
         </v-list>
 
         <template v-slot:append>
@@ -61,6 +69,7 @@
 <script>
 import Table from './components/Table';
 import CardSearch from './components/CardSearch'
+import Counter from './components/Counter';
 
 export default {
   name: 'App',
@@ -68,6 +77,7 @@ export default {
   components: {
     Table,
     CardSearch,
+    Counter,
   },
 
   data: () => ({
