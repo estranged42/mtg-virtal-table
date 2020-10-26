@@ -1,28 +1,50 @@
 <template>
   <v-app>
-    <v-app-bar
+
+    <v-navigation-drawer
       app
-      color="primary"
       dark
+      src="images/wood-background2.jpg"
+      width=300
     >
-      <v-toolbar-title>MTG: Virtual Table</v-toolbar-title>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title class="title">
+              MTG: Virtual Table
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              By Mark Fischer - @estranged
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
 
-      <v-spacer></v-spacer>
+        <v-divider></v-divider>
 
-      <v-btn
-        icon
-        @click="addPlayer"
-      >
-        <v-icon>mdi-account-plus</v-icon>
-      </v-btn>
+        <v-list
+          nav
+        >
+          <v-list-item
+            link
+            @click="addPlayer"
+          >
+            <v-list-item-icon>
+              <v-icon left>mdi-account-plus</v-icon>
+            </v-list-item-icon>
 
-      <v-spacer></v-spacer>
+            <v-list-item-content>
+              <v-list-item-title>Add Player</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
 
-      <div class="card-search">
-        <CardSearch/>
-      </div>
+        </v-list>
 
-    </v-app-bar>
+        <template v-slot:append>
+            <div class="pa-2">
+              <CardSearch/>
+            </div>
+        </template>
+
+    </v-navigation-drawer>
 
     <v-main>
       <Table :players="players"/>
