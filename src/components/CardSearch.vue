@@ -3,7 +3,7 @@
         <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            label="Search for Cards"
             :loading="loading"
             loader-height="5"
             ref="cardsearchfield"
@@ -13,6 +13,7 @@
 
         <v-simple-table
             height="300"
+            class="pa-2"
         >
             <template v-slot:default>
                 <tr
