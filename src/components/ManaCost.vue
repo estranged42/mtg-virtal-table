@@ -2,8 +2,8 @@
     <span class="mana_costs_container">
         <div 
             v-for="m in mana_costs"
-            :key="m"
-            :class="m"
+            :key="m.id"
+            :class="m.class"
         ></div>
     </span>
 </template>
@@ -19,9 +19,11 @@ export default {
         const regex = /([0-9WBRGU]+)/g;
         let matches = this.cost.match(regex)
         if (matches) {
-            matches.forEach(element => (function(scope){
-                scope.mana_costs = scope.mana_costs.concat(`mana_cost mana_icon_${element}`)
-            })(this));
+            for (let index = 0; index < matches.length; index++) {
+                const element = matches[index];
+                let m = {id: index, class: `mana_cost mana_icon_${element}`}
+                this.mana_costs = this.mana_costs.concat(m)
+            }
         }
     },
 }
