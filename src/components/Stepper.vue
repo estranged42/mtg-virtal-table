@@ -1,5 +1,15 @@
 <template>
     <v-sheet class="stepper-box" width="50" height="50">
+        <v-icon
+            v-if="icon"
+            size="50"
+            color="rgba(255,255,255,0.2)"
+            class="background-icon"
+            v-bind:style="{ top: iconoffset + 'px' }"
+            ref="backgroundicon"
+        >
+            {{icon}}
+        </v-icon>
         <p class="stepper-count">{{ count.val }}</p>
         <v-hover>
             <template v-slot:default="{ hover }">
@@ -32,12 +42,13 @@
                 </div>
             </template>
         </v-hover>
-    </v-sheet>
+
+     </v-sheet>
 </template>
 
 <script>
 export default {
-    props: ['count'],
+    props: ['count', 'icon', 'iconoffset'],
     methods: {
         updateCount(inc) {
             this.count.val = this.count.val + inc
@@ -48,19 +59,21 @@ export default {
 
 <style lang="scss" >
 
-.stepper-box {
+div.stepper-box {
     display: inline-block;
     margin: 8px;
     position: relative;
+    background-color: transparent !important;
 }
 
 p.stepper-count {
     margin: 0;
     padding: 0;
     text-align: center;
-    font-size: 2em;
+    font-size: 1.3em;
     font-weight: bold;
     line-height: 50px;
+    z-index: 1;
 }
 
 .stepper-box {
@@ -69,6 +82,7 @@ p.stepper-count {
         width: 50px;
         height: 25px;
         box-sizing: border-box;
+        z-index: 2;
     }
 
     .add {
@@ -78,6 +92,13 @@ p.stepper-count {
     .subtract {
         top: 25px;
     }
+
+    .background-icon {
+        position: absolute;
+        background-color: transparent;
+        z-index: 0;
+    }
 }
+
 
 </style>

@@ -25,7 +25,7 @@
                         ref="counterNameEditField"
                     ></v-text-field>
                 </v-card-title>
-                <Stepper :count="count"/>
+                <Stepper :count="count" icon="mdi-circle-outline"/>
 
         </div>
     </v-card>
