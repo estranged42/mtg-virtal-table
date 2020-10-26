@@ -47,7 +47,13 @@
     </v-navigation-drawer>
 
     <v-main class="main-table">
-      <Table :players="players"/>
+      <v-img
+        :src="require('@/assets/ragnaros-faded.jpg')"
+        :lazy-src="require('@/assets/ragnaros-blur.jpg')"
+        height="100%"
+      >
+        <Table :players="players"/>
+      </v-img>
     </v-main>
   </v-app>
 </template>
