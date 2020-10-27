@@ -1,43 +1,48 @@
 <template>
-    <v-card
-        class="counter"
-    >
-        <div class="d-flex flex-no-wrap justify-space-between">
-                <v-card-title
-                    v-text="counterdata.name"
-                    v-if="!editingCounterName"
-                    @click="doEditCounterName"
-                ></v-card-title>
-                <v-card-title 
-                    v-if="editingCounterName"
-                    class="counter-title-edit"
-                >
-                    <v-text-field
-                        class="edit-field"
-                        v-model="counterdata.name"
-                        label="Press enter to save"
-                        placeholder="Counter Name"
-                        outlined
-                        dense
-                        hide-details="true"
-                        @keydown.enter="endEditCounterName"
-                        @blur="endEditCounterName"
-                        ref="counterNameEditField"
-                    ></v-text-field>
-                </v-card-title>
-                <Stepper :count="counterdata.count" icon="mdi-circle-outline"/>
-                <v-btn
-                    v-if="closefn"
-                    icon
-                    x-small
-                    color="grey"
-                    class="ma-1"
-                    @click="doClose"
-                >
-                    <v-icon>mdi-close-circle</v-icon>
-                </v-btn>
-        </div>
-    </v-card>
+    <v-hover>
+        <template v-slot:default="{ hover }">
+            <v-card
+                class="counter"
+            >
+                <div class="d-flex flex-no-wrap">
+                        <Stepper :count="counterdata.count" icon="mdi-hexagon"/>
+                        <v-card-title
+                            v-text="counterdata.name"
+                            v-if="!editingCounterName"
+                            @click="doEditCounterName"
+                        ></v-card-title>
+                        <v-card-title 
+                            v-if="editingCounterName"
+                            class="counter-title-edit"
+                        >
+                            <v-text-field
+                                class="edit-field"
+                                v-model="counterdata.name"
+                                label="Press enter to save"
+                                placeholder="Counter Name"
+                                outlined
+                                dense
+                                hide-details="true"
+                                @keydown.enter="endEditCounterName"
+                                @blur="endEditCounterName"
+                                ref="counterNameEditField"
+                            ></v-text-field>
+                        </v-card-title>
+
+                        <v-btn
+                            v-if="closefn && hover"
+                            icon
+                            x-small
+                            color="grey"
+                            class="ma-1 close-btn"
+                            @click="doClose"
+                        >
+                            <v-icon>mdi-close-circle</v-icon>
+                        </v-btn>
+                </div>
+            </v-card>
+        </template>
+    </v-hover>
 
 </template>
 
@@ -74,4 +79,19 @@ export default {
 
 <style>
 
+.counter {
+    margin: 2px;
+    position: relative;
+}
+
+.counter .v-card__title {
+    padding: 0px 5px;
+}
+
+.counter .close-btn {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin: 2px;
+}
 </style>
