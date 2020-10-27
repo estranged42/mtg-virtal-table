@@ -56,11 +56,17 @@
 
     <v-main class="main-table">
       <v-img
-        :src="require('@/assets/ragnaros-faded.jpg')"
-        :lazy-src="require('@/assets/ragnaros-blur.jpg')"
+        class="backgroundimage"
+        :src="background.filename"
         height="100%"
       >
         <Table :players="players"/>
+        <v-sheet 
+          class="image-credit pa-1"
+          color="rgba(255,255,255,0.5)"
+        >
+          Image Credit: <a :href="background.url">{{background.credit}}</a>
+        </v-sheet>
       </v-img>
     </v-main>
   </v-app>
@@ -86,7 +92,34 @@ export default {
         {id: 2, name: "Player Two"},
     ],
     nextPlayerId: 3,
+    background: undefined,
+    backgroundImages: [
+      {
+          credit: "Enrique Meseguer", 
+          url: "https://pixabay.com/photos/fantasy-landscape-fantasy-landscape-4069829/", 
+          filename: require("@/assets/fantasy-4069829_1920.jpg")
+      },
+      {
+          credit: "Raphael Lacoste", 
+          url: "https://www.goodfon.com/wallpaper/raphael-lacoste-sentinels-fantasy-landscape-art-ruiny.html", 
+          filename: require("@/assets/fantasy-ruins.jpg")
+      },
+      {
+          credit: "Blizzard Entertainment", 
+          url: "https://blizzard.gamespress.com/be/World-of-Warcraft", 
+          filename: require("@/assets/ragnaros.jpg")
+      },
+      {
+          credit: "Blizzard Entertainment", 
+          url: "https://blizzard.gamespress.com/be/World-of-Warcraft", 
+          filename: require("@/assets/Arrak_Landscape_Color.jpg")
+      }
+    ]
   }),
+  mounted() {
+    let r = Math.floor( Math.random() * this.backgroundImages.length )
+    this.background = this.backgroundImages[r]
+  },
   methods: {
     addPlayer() {
       let p = {id: this.nextPlayerId, name: "New Player"}
@@ -97,7 +130,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+
+.backgroundimage {
+  .v-image__image {
+    filter: brightness(200%) contrast(30%) blur(2px);
+  }
+
+  .image-credit {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+  }
+}
 
 .card-search {
   width: 400px;
