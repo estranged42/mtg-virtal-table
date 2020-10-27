@@ -73,14 +73,13 @@
 
                 <v-spacer></v-spacer>
 
-
-                        <v-btn
-                            v-if="hover"
-                            icon
-                            @click.stop="dialog = true"
-                        >
-                            <v-icon>mdi-delete</v-icon>
-                        </v-btn>
+                <v-btn
+                    v-if="hover"
+                    icon
+                    @click.stop="dialog = true"
+                >
+                    <v-icon>mdi-delete</v-icon>
+                </v-btn>
 
                 </v-toolbar>
                 </template>
@@ -95,13 +94,13 @@
                 mode="cut"
             >
                 <template v-slot:item="{item}">
-                    <drag class="item" :key="item.table_card_id" :data="item" @cut="remove(item)">
+                    <drag class="item" :key="getCardId()" :data="item" @cut="remove(item)">
                         <Card v-if="item.drag_type=='card'" v-bind:carddata="item" :closefn="remove"/>
                         <Counter v-if="item.drag_type=='counter'" :counterdata="item" :closefn="remove"/>
                     </drag>
                 </template>
                 <template v-slot:feedback="{data}">
-                    <div class="item feedback" :key="data.table_card_id">
+                    <div class="item feedback" :key="getCardId()">
                         <Card v-if="data.drag_type=='card'" v-bind:carddata="data"/>
                         <Counter v-if="data.drag_type=='counter'" :counterdata="data"/>
                     </div>
@@ -138,7 +137,8 @@ export default {
     }),
     methods: {
         onInsert(event) {
-            this.cards.splice(event.index, 0, event.data);
+            let dataCopy = JSON.parse(JSON.stringify(event.data));
+            this.cards.splice(event.index, 0, dataCopy);
         },
         onReorder(event) {
             event.apply(this.cards)

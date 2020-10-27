@@ -4,7 +4,7 @@
     >
         <div class="d-flex flex-no-wrap justify-space-between">
                 <v-card-title
-                    v-text="name"
+                    v-text="counterdata.name"
                     v-if="!editingCounterName"
                     @click="doEditCounterName"
                 ></v-card-title>
@@ -14,7 +14,7 @@
                 >
                     <v-text-field
                         class="edit-field"
-                        v-model="name"
+                        v-model="counterdata.name"
                         label="Press enter to save"
                         placeholder="Counter Name"
                         outlined
@@ -25,7 +25,7 @@
                         ref="counterNameEditField"
                     ></v-text-field>
                 </v-card-title>
-                <Stepper :count="count" icon="mdi-circle-outline"/>
+                <Stepper :count="counterdata.count" icon="mdi-circle-outline"/>
                 <v-btn
                     v-if="closefn"
                     icon
@@ -50,8 +50,6 @@ export default {
     },
     props: ['counterdata', 'closefn'],
     data: () => ({
-        name: "New Counter",
-        count: {val: 1},
         editingCounterName: false,
     }),
     methods: {

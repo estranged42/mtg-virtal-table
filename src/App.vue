@@ -39,8 +39,8 @@
           <v-list-item
           >
             <v-list-item-content>
-                <drag :key="counterData.table_card_id" :data="counterData" @dragstart="onDragStart" @cut="onCut">
-                    <Counter counterdata="counterData"/>
+                <drag :data="counterData" @dragstart="onDragStart" @cut="onCut">
+                    <Counter :counterdata="counterData"/>
                 </drag>
             </v-list-item-content>
           </v-list-item>
@@ -140,7 +140,7 @@ export default {
     counterData: {
       drag_type: "counter", 
       name: "New Counter", 
-      count: 1, 
+      count: {val: 1}, 
       table_card_id: 0
     },
   }),
@@ -170,7 +170,7 @@ export default {
     onDragStart(event) {
       let counterSource = event.source.data
       counterSource.table_card_id = this.getCardId()
-      console.log(event)
+      // console.log(event)
     },
     onCut() {}
   }
