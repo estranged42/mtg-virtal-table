@@ -26,7 +26,16 @@
                     ></v-text-field>
                 </v-card-title>
                 <Stepper :count="count" icon="mdi-circle-outline"/>
-
+                <v-btn
+                    v-if="closefn"
+                    icon
+                    x-small
+                    color="grey"
+                    class="ma-1"
+                    @click="doClose"
+                >
+                    <v-icon>mdi-close-circle</v-icon>
+                </v-btn>
         </div>
     </v-card>
 
@@ -39,6 +48,7 @@ export default {
     components: {
         Stepper,
     },
+    props: ['counterdata', 'closefn'],
     data: () => ({
         name: "New Counter",
         count: {val: 1},
@@ -54,6 +64,11 @@ export default {
         },
         endEditCounterName() {
             this.editingCounterName = false
+        },
+        doClose() {
+            if (this.closefn != undefined) {
+                this.closefn(this.counterdata)
+            }
         }
     }
 }

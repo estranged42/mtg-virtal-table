@@ -38,10 +38,13 @@
         <v-card
             class="player-card"
         >
+            <v-hover>
+            <template v-slot:default="{ hover }">
             <v-toolbar
                 color="indigo"
                 dark
             >
+
                 <v-toolbar-title 
                     v-if="!editingPlayerName"
                     @click.self="doEditPlayerName"
@@ -66,20 +69,23 @@
                     ></v-text-field>
                 </v-toolbar-title>
 
-                <v-spacer></v-spacer>
-
                 <Stepper :count="health" icon="mdi-heart" iconoffset="2"/>
 
                 <v-spacer></v-spacer>
 
-                <v-btn
-                    icon
-                    @click.stop="dialog = true"
-                >
-                    <v-icon>mdi-delete</v-icon>
-                </v-btn>
 
-            </v-toolbar>
+                        <v-btn
+                            v-if="hover"
+                            icon
+                            @click.stop="dialog = true"
+                        >
+                            <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+
+                </v-toolbar>
+                </template>
+            </v-hover>
+
             <drop-list
                 :items="cards"
                 class="cards"
@@ -91,13 +97,13 @@
                 <template v-slot:item="{item}">
                     <drag class="item" :key="item.table_card_id" :data="item" @cut="remove(item)">
                         <Card v-if="item.drag_type=='card'" v-bind:carddata="item" :closefn="remove"/>
-                        <Counter v-if="item.drag_type=='counter'" counterdata="item"/>
+                        <Counter v-if="item.drag_type=='counter'" :counterdata="item" :closefn="remove"/>
                     </drag>
                 </template>
                 <template v-slot:feedback="{data}">
                     <div class="item feedback" :key="data.table_card_id">
                         <Card v-if="data.drag_type=='card'" v-bind:carddata="data"/>
-                        <Counter v-if="data.drag_type=='counter'" counterdata="data"/>
+                        <Counter v-if="data.drag_type=='counter'" :counterdata="data"/>
                     </div>
                 </template>
                 <template v-slot:reordering-feedback="{}">
