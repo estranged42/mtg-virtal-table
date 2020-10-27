@@ -58,6 +58,7 @@
     <v-main class="main-table">
       <v-img
         class="backgroundimage"
+        :lazy-src="background.lazysrc"
         :src="background.filename"
         height="100%"
       >
@@ -78,6 +79,7 @@ import Table from './components/Table';
 import CardSearch from './components/CardSearch'
 import Counter from './components/Counter';
 import { Drag } from "vue-easy-dnd";
+import { decode } from "blurhash";
 
 export default {
   name: 'App',
@@ -99,24 +101,35 @@ export default {
     backgroundImages: [
       {
           credit: "Enrique Meseguer", 
-          url: "https://pixabay.com/photos/fantasy-landscape-fantasy-landscape-4069829/", 
+          url: "https://pixabay.com/photos/fantasy-landscape-fantasy-landscape-4069829/",
+          blurhash: "LNC%:KNbMwog_3IV%Nof_4M|oLV@",
           filename: require("@/assets/fantasy-4069829_1920.jpg")
       },
       {
           credit: "Raphael Lacoste", 
-          url: "https://www.goodfon.com/wallpaper/raphael-lacoste-sentinels-fantasy-landscape-art-ruiny.html", 
+          url: "https://www.goodfon.com/wallpaper/raphael-lacoste-sentinels-fantasy-landscape-art-ruiny.html",
+          blurhash: "LUCsgakCITM__NR+RPRjxvRjofj[",
           filename: require("@/assets/fantasy-ruins.jpg")
       },
       {
           credit: "Blizzard Entertainment", 
-          url: "https://blizzard.gamespress.com/be/World-of-Warcraft", 
+          url: "https://blizzard.gamespress.com/be/World-of-Warcraft",
+          blurhash: "LMI{sLM~0j}-5RX8w[s;I@NGbckV",
           filename: require("@/assets/ragnaros.jpg")
       },
       {
           credit: "Blizzard Entertainment", 
-          url: "https://blizzard.gamespress.com/be/World-of-Warcraft", 
+          url: "https://blizzard.gamespress.com/be/World-of-Warcraft",
+          blurhash: "LsI{~CSzNcsT}=oeWXjZNtxFayR+",
           filename: require("@/assets/Arrak_Landscape_Color.jpg")
+      },
+      {
+          credit: "Johannes Plenio", 
+          url: "https://unsplash.com/photos/1vzLW-ihJaM",
+          blurhash: "LkEnhUR*0gt6ENj@$%ayIVoextWB",
+          filename: "https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjE3Nzk4Mn0"
       }
+
     ],
     counterData: {
       drag_type: "counter", 
@@ -129,6 +142,18 @@ export default {
     let r = Math.floor( Math.random() * this.backgroundImages.length )
     this.background = this.backgroundImages[r]
     this.counterData.table_card_id = this.getCardId()
+
+    const width = 300
+    const height = 150
+    const pixels = decode(this.background.blurhash, width, height);
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.createImageData(width, height);
+    imageData.data.set(pixels);
+    ctx.putImageData(imageData, 0, 0);
+    this.background.lazysrc = canvas.toDataURL('image/png')
+
   },
   methods: {
     addPlayer() {
