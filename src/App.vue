@@ -97,7 +97,7 @@ export default {
         {id: 2, name: "Player Two"},
     ],
     nextPlayerId: 3,
-    background: { credit: "", url: "", filename: "" },
+    background: { credit: "", url: "", filename: "", blurhash: "" },
     backgroundImages: [
       {
           credit: "Enrique Meseguer", 
@@ -128,7 +128,13 @@ export default {
           url: "https://unsplash.com/photos/1vzLW-ihJaM",
           blurhash: "LkEnhUR*0gt6ENj@$%ayIVoextWB",
           filename: "https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjE3Nzk4Mn0"
-      }
+      },
+      {
+          credit: "Tomas Sobek", 
+          url: "https://unsplash.com/photos/EKNe678ktEY",
+          blurhash: "LrGSAkt7t8Rj?wofofWBtSa}WBj[",
+          filename: "https://images.unsplash.com/photo-1472982728022-601a8d99e9af?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE3Nzk4Mn0"
+      },
 
     ],
     counterData: {
@@ -175,7 +181,7 @@ export default {
 
 .backgroundimage {
   .v-image__image {
-    filter: brightness(200%) contrast(30%) blur(2px);
+    filter: brightness(150%) contrast(40%) blur(2px);
   }
 
   .image-credit {
