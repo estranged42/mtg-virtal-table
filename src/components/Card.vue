@@ -6,19 +6,51 @@
         open-delay="600"
     >
         <template v-slot:activator="{ on, attrs }">
-            <v-chip
-                light
-                v-bind="attrs"
-                v-on="on"
-                class="card_chip"
-                :close="closable"
-                @click:close="doClose"
-            >
-                {{ carddata.name }}
-                <ManaCost :cost="carddata.mana_cost"/>
-            </v-chip>
-            
+            <v-hover>
+                <template v-slot:default="{ hover }">
+                    <v-card
+                        class="card_card"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <div class="d-flex flex-no-wrap">
+                            <v-img 
+                                :src="carddata.image_uris.art_crop"
+                                max-width=50
+                                max-height=50
+                                min-height="50"
+                                min-width="50"
+                            ></v-img>
+
+                            <div>
+                                <v-card-title>
+                                    {{ carddata.name }} 
+                                    <ManaCost :cost="carddata.mana_cost"/>
+                                </v-card-title>
+
+                                <v-card-text>
+                                    {{ carddata.type_line }} 
+                                </v-card-text>
+                            </div>
+
+                            <v-btn
+                                class="close-btn"
+                                v-if="closefn && hover"
+                                fab
+                                width="45"
+                                height="45"
+                                color="white"
+                                @click="doClose"
+                            >
+                                <v-icon color="black">mdi-close</v-icon>
+                            </v-btn>
+                        </div>
+                    </v-card>
+
+                </template>
+            </v-hover>            
         </template>
+
         <v-card
             class="card_details"
             width=500
@@ -80,23 +112,44 @@ export default {
     padding: 0 5px;
 }
 
-.card_chip {
+.card_card {
+    position: relative;
     margin: 2px;
 }
 
-.card_chip .v-chip__content {
+.card_card .v-chip__content {
     width: 100%;
     position: relative;
 }
 
-.card_chip .card_title {
+.card_card .v-card__title {
     font-size: 1rem;
+    line-height: 1rem;
     padding: 0;
 }
 
-.card_chip .mana_costs_container {
-    line-height: 0;
+.card_card .v-card__text {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.card_card .v-card__subtitle, 
+.card_card .v-card__text, 
+.card_card .v-card__title {
+    padding: 4px;
+}
+
+.card_card .mana_costs_container {
     margin: 0px 5px;
+}
+
+.card_card .close-btn {
+    position: absolute;
+    margin: 2px;
+    top: 0px;
+    left: 0px;
 }
 
 .v-tooltip__content.card_wrapper {
