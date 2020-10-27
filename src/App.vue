@@ -179,16 +179,14 @@ export default {
 
 <style lang="scss">
 
-.backgroundimage {
-  .v-image__image {
-    filter: brightness(150%) contrast(40%) blur(2px);
-  }
+.backgroundimage > .v-image__image {
+  filter: brightness(150%) contrast(40%) blur(2px);
+}
 
-  .image-credit {
-    position: fixed;
-    bottom: 0px;
-    right: 0px;
-  }
+.image-credit {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
 }
 
 .card-search {
