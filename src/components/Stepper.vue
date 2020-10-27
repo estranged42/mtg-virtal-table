@@ -61,9 +61,8 @@ export default {
 
 div.stepper-box {
     display: inline-block;
-    margin: 8px;
+    margin: 0px;
     position: relative;
-    background-color: transparent !important;
 }
 
 p.stepper-count {
@@ -83,6 +82,7 @@ p.stepper-count {
         height: 25px;
         box-sizing: border-box;
         z-index: 2;
+        cursor: pointer;
     }
 
     .add {

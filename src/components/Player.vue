@@ -42,6 +42,7 @@
             <template v-slot:default="{ hover }">
             <v-toolbar
                 color="indigo"
+                class="player-toolbar"
                 dark
             >
 
@@ -181,6 +182,20 @@ export default {
     .edit-field,
     .toolbar-title-edit {
         overflow: visible;
+    }
+
+    .player-toolbar {
+        .stepper-box {
+            background-color: transparent;
+            margin: 0px 10px;
+        }
+    }
+
+    .cards {
+        .stepper-box {
+            background-color: #333;
+            color: white;
+        }
     }
 }
 
