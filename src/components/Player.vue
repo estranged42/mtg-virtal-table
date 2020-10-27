@@ -90,12 +90,14 @@
             >
                 <template v-slot:item="{item}">
                     <drag class="item" :key="item.table_card_id" :data="item" @cut="remove(item)">
-                        <Card v-bind:carddata="item" :closefn="remove"/>
+                        <Card v-if="item.drag_type=='card'" v-bind:carddata="item" :closefn="remove"/>
+                        <Counter v-if="item.drag_type=='counter'" counterdata="item"/>
                     </drag>
                 </template>
                 <template v-slot:feedback="{data}">
                     <div class="item feedback" :key="data.table_card_id">
-                        <Card v-bind:carddata="data"/>
+                        <Card v-if="data.drag_type=='card'" v-bind:carddata="data"/>
+                        <Counter v-if="data.drag_type=='counter'" counterdata="data"/>
                     </div>
                 </template>
                 <template v-slot:reordering-feedback="{}">
@@ -110,12 +112,14 @@
 <script>
 import { Drag, DropList } from "vue-easy-dnd";
 import Card from './Card';
+import Counter from './Counter';
 import Stepper from './Stepper';
 
 export default {
     props: ['player', 'deleteHandler'],
     components: {
         Card,
+        Counter,
         Stepper,
         Drag,
         DropList

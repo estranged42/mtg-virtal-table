@@ -77,6 +77,7 @@ export default {
                         let cards = data.data
                         cards.forEach(element => (function(scope){
                             element.table_card_id = scope.getCardId()
+                            element.drag_type = "card"
                             // console.log(element)
                             scope.items = scope.items.concat(element)
                         })(this));

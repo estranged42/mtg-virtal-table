@@ -39,10 +39,11 @@
           <v-list-item
           >
             <v-list-item-content>
-              <Counter />
+                <drag :key="counterData.table_card_id" :data="counterData" @dragstart="onDragStart" @cut="onCut">
+                    <Counter counterdata="counterData"/>
+                </drag>
             </v-list-item-content>
           </v-list-item>
-
 
         </v-list>
 
@@ -76,6 +77,7 @@
 import Table from './components/Table';
 import CardSearch from './components/CardSearch'
 import Counter from './components/Counter';
+import { Drag } from "vue-easy-dnd";
 
 export default {
   name: 'App',
@@ -84,6 +86,7 @@ export default {
     Table,
     CardSearch,
     Counter,
+    Drag,
   },
 
   data: () => ({
@@ -92,7 +95,7 @@ export default {
         {id: 2, name: "Player Two"},
     ],
     nextPlayerId: 3,
-    background: undefined,
+    background: { credit: "", url: "", filename: "" },
     backgroundImages: [
       {
           credit: "Enrique Meseguer", 
@@ -114,11 +117,18 @@ export default {
           url: "https://blizzard.gamespress.com/be/World-of-Warcraft", 
           filename: require("@/assets/Arrak_Landscape_Color.jpg")
       }
-    ]
+    ],
+    counterData: {
+      drag_type: "counter", 
+      name: "New Counter", 
+      count: 1, 
+      table_card_id: 0
+    },
   }),
   mounted() {
     let r = Math.floor( Math.random() * this.backgroundImages.length )
     this.background = this.backgroundImages[r]
+    this.counterData.table_card_id = this.getCardId()
   },
   methods: {
     addPlayer() {
@@ -126,6 +136,12 @@ export default {
       this.players = this.players.concat(p)
       this.nextPlayerId = this.nextPlayerId + 1
     },
+    onDragStart(event) {
+      let counterSource = event.source.data
+      counterSource.table_card_id = this.getCardId()
+      console.log(event)
+    },
+    onCut() {}
   }
 };
 </script>
