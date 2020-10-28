@@ -7,6 +7,10 @@ OK, but once you got to 3 or 4 players, it was a lost cause.
 This tool allows one person to keep track of everyone's cards as they get played. They can then share their screen
 so everyone can follow along.
 
+See the [MTG: Virtual Table][mtgvirtual] site for an example. (Or just use this tool from there!)
+
+[mtgvirtual]: https://mtgvirtualtable.fischco.org
+
 ## Features
 
 * Multiple players

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="mtgvirtualtable">
 
     <v-navigation-drawer
       app
@@ -13,7 +13,7 @@
               MTG: Virtual Table
             </v-list-item-title>
             <v-list-item-subtitle>
-              By Mark Fischer - @estranged
+              By <a href="https://github.com/estranged42/mtg-virtual-table">Mark Fischer - @estranged</a>
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -65,7 +65,6 @@
         <Table :players="players"/>
         <v-sheet 
           class="image-credit pa-1"
-          color="rgba(255,255,255,0.5)"
         >
           Image Credit: <a :href="background.url">{{background.credit}}</a>
         </v-sheet>
@@ -179,15 +178,25 @@ export default {
 
 <style lang="scss">
 
+div.mtgvirtualtable {
+  a {
+    color: white;
+  }
+
+  .image-credit {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    background-color: rgba(55,55,55,0.5);
+    color: white;
+  }
+
+}
+
 .backgroundimage > .v-image__image {
   filter: brightness(150%) contrast(40%) blur(2px);
 }
 
-.image-credit {
-  position: fixed;
-  bottom: 0px;
-  right: 0px;
-}
 
 .card-search {
   width: 400px;
