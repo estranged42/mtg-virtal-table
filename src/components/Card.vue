@@ -34,15 +34,14 @@
                             </div>
 
                             <v-btn
+                                v-show="closefn && hover"
+                                icon
+                                x-small
+                                color="grey"
                                 class="close-btn"
-                                v-if="closefn && hover"
-                                fab
-                                width="45"
-                                height="45"
-                                color="white"
                                 @click="doClose"
                             >
-                                <v-icon color="black">mdi-close</v-icon>
+                                <v-icon>mdi-close-circle</v-icon>
                             </v-btn>
                         </div>
                     </v-card>
@@ -147,9 +146,10 @@ export default {
 
 .card_card .close-btn {
     position: absolute;
-    margin: 2px;
+    background-color: white;
+    margin: 1px 6px;
     top: 0px;
-    left: 0px;
+    right: 0px;
 }
 
 .v-tooltip__content.card_wrapper {
