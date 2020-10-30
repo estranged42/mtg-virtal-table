@@ -92,6 +92,7 @@ Resources:
           ResponsePagePath: "/index.html"
         DefaultRootObject: index.html
         DefaultCacheBehavior:
+          Compress: true
           TargetOriginId: !Sub "S3-${S3WebsiteBucket}"
           ForwardedValues:
             QueryString: false
