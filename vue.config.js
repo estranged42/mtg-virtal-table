@@ -8,8 +8,14 @@ module.exports = {
   "transpileDependencies": [
     "vuetify"
   ],
-  configureWebpack: {
-    mode: 'development',
-    devtool: 'inline-source-map'
+  chainWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      config
+          .plugin('html-index')
+          .tap(args => {
+              args[0].template = "public/index-prod.html";
+              return args;
+          })
+    }
   }
 }

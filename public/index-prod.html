@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <meta property="og:image" content="https://mtgvirtualtable.fischco.org/images/og-thumbnail.png">
+    <meta property="og:title" content="MTG: Virtual Table">
+    <meta property="og:description" content="Keep track of a Magic the Gathering game when you can't all be at the same table.">
+    <meta property="og:url" content="https://mtgvirtualtable.fischco.org/">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="MTG: Virtual Table">
+    <meta property="twitter:description" content="Keep track of a Magic the Gathering game when you can't all be at the same table.">
+    <meta property="twitter:site" content="@estranged">
+    <meta property="twitter:image" content="https://mtgvirtualtable.fischco.org/images/og-thumbnail.png">
+
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQBXHEV0BS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-HQBXHEV0BS');
+    </script>
+
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
