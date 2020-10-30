@@ -5,9 +5,14 @@
       color="deep-purple"
       v-if="$vuetify.breakpoint.mobile"
       class="mobile-app-bar"
+      src="images/wood-background2-sm.jpg"
       dark
+      app
+      fixed
+      elevate-on-scroll
     >
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-toolbar-title>MTG: Virtual Table</v-toolbar-title>
 
     </v-app-bar>
 
@@ -105,6 +110,7 @@ export default {
 
   data: () => ({
     drawer: true,
+    collapseOnScroll: false,
     players: [
         {id: 1, name: "Player One"},
         {id: 2, name: "Player Two"},

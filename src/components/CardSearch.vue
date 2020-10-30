@@ -13,7 +13,7 @@
 
         <v-simple-table
             height="300"
-            class="pa-2"
+            class="pa-2 search-table"
         >
             <template v-slot:default>
                 <tr
@@ -117,3 +117,13 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+
+.search-table {
+    .v-data-table__wrapper {
+        overflow-x: hidden;
+    }
+}
+
+</style>
