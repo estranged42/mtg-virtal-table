@@ -1,7 +1,7 @@
 <template>
     <v-container class="players">
         <v-row>
-            <v-col v-for="p in players" :key="p.id" cols=4>
+            <v-col v-for="p in players" :key="p.id" class="players-list">
                 <Player :player="p" :deleteHandler="deletePlayer" />
             </v-col>
         </v-row>
@@ -41,4 +41,8 @@ export default {
 
 <style scoped lang="scss">
 
+.players-list {
+    min-width: 380px;
+    flex-grow: 0.5;
+}
 </style>

@@ -105,8 +105,8 @@ export default {
                     }
                 })
         },
-        onDragStart: (event) => {
-          console.log(event);
+        onDragStart: function(event) {
+            this.$emit('beginCardSearchDrag', event)
         },
         onCut: (event) => {
             console.log(event)

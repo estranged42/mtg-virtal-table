@@ -1,7 +1,18 @@
 <template>
   <v-app class="mtgvirtualtable">
 
+    <v-app-bar
+      color="deep-purple"
+      v-if="$vuetify.breakpoint.mobile"
+      class="mobile-app-bar"
+      dark
+    >
+      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+
+    </v-app-bar>
+
     <v-navigation-drawer
+      v-model="drawer"
       app
       dark
       src="images/wood-background2-sm.jpg"
@@ -47,10 +58,12 @@
 
         </v-list>
 
+        <div>
+            <CardSearch @beginCardSearchDrag="doCloseDrawer"/>
+        </div>
+
         <template v-slot:append>
-            <div class="pa-2">
-              <CardSearch/>
-            </div>
+            
         </template>
 
     </v-navigation-drawer>
@@ -91,6 +104,7 @@ export default {
   },
 
   data: () => ({
+    drawer: true,
     players: [
         {id: 1, name: "Player One"},
         {id: 2, name: "Player Two"},
@@ -169,7 +183,13 @@ export default {
     onDragStart(event) {
       let counterSource = event.source.data
       counterSource.table_card_id = this.getCardId()
+      this.doCloseDrawer()
       // console.log(event)
+    },
+    doCloseDrawer() {
+      if (this.$vuetify.breakpoint.mobile && this.drawer == true) {
+        this.drawer = false
+      }
     },
     onCut() {}
   }
@@ -177,6 +197,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+header.mobile-app-bar {
+  flex: unset;
+}
 
 div.mtgvirtualtable {
   a {

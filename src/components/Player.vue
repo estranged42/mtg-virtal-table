@@ -170,8 +170,9 @@ export default {
 
 .cards {
     padding: 5px;
-    border: 1px solid black;
     min-height: 75px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 
     .item {
         display: inline-block;
