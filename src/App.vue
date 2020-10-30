@@ -4,7 +4,7 @@
     <v-navigation-drawer
       app
       dark
-      src="images/wood-background2.jpg"
+      src="images/wood-background2-sm.jpg"
       width=300
     >
         <v-list-item>
