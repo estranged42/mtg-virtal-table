@@ -52,11 +52,11 @@
 
         <v-card
             class="card_details"
-            width=500
             rounded="lg"
+            min-width="250"
         >
             <div class="d-flex flex-no-wrap justify-space-between">
-                <div>
+                <div class="descriptive-text" v-if="!$vuetify.breakpoint.mobile">
                     <v-card-title
                     v-text="carddata.name"
                     ></v-card-title>
@@ -154,6 +154,11 @@ export default {
 
 .v-tooltip__content.card_wrapper {
     background: none;
+}
+
+.card_details .descriptive-text {
+    width: 250px;
+
 }
 
 </style>
