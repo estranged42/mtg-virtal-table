@@ -1,0 +1,84 @@
+{
+    "headers": {
+        "Cache-Control": "no-cache",
+        "Host": "5mz965txnl.execute-api.us-west-2.amazonaws.com",
+        "Origin": "https: //developer.mozilla.org",
+        "Pragma": "no-cache",
+        "Sec-WebSocket-Extensions": "x-webkit-deflate-frame",
+        "Sec-WebSocket-Key": "DXKSpXbVMY4S/T6M6qkiow==",
+        "Sec-WebSocket-Version": "13",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15",
+        "X-Amzn-Trace-Id": "Root=1-5f9df6a8-55622d157e33a20260ff5f6a",
+        "X-Forwarded-For": "67.1.143.122",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "multiValueHeaders": {
+        "Cache-Control": [
+            "no-cache"
+        ],
+        "Host": [
+            "5mz965txnl.execute-api.us-west-2.amazonaws.com"
+        ],
+        "Origin": [
+            "https://developer.mozilla.org"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Sec-WebSocket-Extensions": [
+            "x-webkit-deflate-frame"
+        ],
+        "Sec-WebSocket-Key": [
+            "DXKSpXbVMY4S/T6M6qkiow=="
+        ],
+        "Sec-WebSocket-Version": [
+            "13"
+        ],
+        "User-Agent": [
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15"
+        ],
+        "X-Amzn-Trace-Id": [
+            "Root=1-5f9df6a8-55622d157e33a20260ff5f6a"
+        ],
+        "X-Forwarded-For": [
+            "67.1.143.122"
+        ],
+        "X-Forwarded-Port": [
+            "443"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ]
+    },
+    "requestContext": {
+        "routeKey": "$connect",
+        "messageId": "",
+        "eventType": "CONNECT",
+        "extendedRequestId": "VTN6WEzevHcFw9w=",
+        "requestTime": "31/Oct/2020:23:43:36 +0000",
+        "messageDirection": "IN",
+        "stage": "dev",
+        "connectedAt": 1604187816579,
+        "requestTimeEpoch": 1604187816579,
+        "identity": {
+            "cognitoIdentityPoolId": "",
+            "cognitoIdentityId": "",
+            "principalOrgId": "",
+            "cognitoAuthenticationType": "",
+            "userArn": "",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15",
+            "accountId": "",
+            "caller": "",
+            "sourceIp": "67.1.143.122",
+            "accessKey": "",
+            "cognitoAuthenticationProvider": "",
+            "user": ""
+        },
+        "requestId": "VTN6WEzevHcFw9w=",
+        "domainName": "5mz965txnl.execute-api.us-west-2.amazonaws.com",
+        "connectionId": "VTN6WfdFPHcCIdw=",
+        "apiId": "5mz965txnl"
+    },
+    "isBase64Encoded": false
+}

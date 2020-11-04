@@ -1,0 +1,102 @@
+---
+service: mtgvirtualtable
+
+plugins:
+  - serverless-offline
+  - serverless-python-requirements
+  - serverless-dynamodb-local
+  - serverless-pseudo-parameters
+
+package:
+    exclude:
+      - secrets-*.sh
+      - environment-*.sh
+      - venv/**
+      - .pytest_cache/**
+      - node_modules/**
+      - tests/**
+      - .dynamodb/**
+      - scripts/**
+
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: dev
+  region: us-west-2
+  websocketsApiName: mtgvirtualtable
+  websocketsApiRouteSelectionExpression: $request.body.action
+  logRetentionInDays: 7
+  memorySize: 256
+  tags:
+    service: 'mtgvirtualtable'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetRecords
+        - dynamodb:GetItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:#{AWS::AccountId}:table/${env:DYNAMODB_TABLE}
+    - Effect: Allow
+      Action:
+        - execute-api:Invoke
+      Resource: !Sub "arn:aws:execute-api:${self:provider.region}:*:#{WebsocketsApi}/*"
+
+
+functions:
+  connection:
+    handler: connection.handler
+    events:
+      - websocket:
+          route: $connect
+          routeResponseSelectionExpression: $default
+      - websocket:
+          route: $disconnect
+      - websocket:
+          route: $default
+          routeResponseSelectionExpression: $default
+    environment:
+      GAMETABLE: ${env:DYNAMODB_TABLE}
+      APIGATEWAY_ENDPOINT: !Sub "https://#{WebsocketsApi}.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
+
+  joingame:
+    handler: joingame.handler
+    events:
+      - websocket:
+          route: joingame
+          routeResponseSelectionExpression: $default
+    environment:
+      GAMETABLE: ${env:DYNAMODB_TABLE}
+
+  updategame:
+    handler: updategame.handler
+    events:
+      - websocket:
+          route: updategame
+    environment:
+      GAMETABLE: ${env:DYNAMODB_TABLE}
+
+
+resources:
+  Resources:
+    AssertionTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${env:DYNAMODB_TABLE}
+        AttributeDefinitions:
+          - AttributeName: gameid
+            AttributeType: S
+        KeySchema:
+          - AttributeName: gameid
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: expiration
+          Enabled: true

@@ -1,0 +1,14 @@
+{
+    "name": "mtgvirtualtable",
+    "version": "1.0.0",
+    "description": "",
+    "devDependencies": {
+        "serverless": "^1.56.1",
+        "serverless-dynamodb-local": "^0.2.38",
+        "serverless-offline": "^5.8.0",
+        "serverless-python-requirements": "^4.3.0"
+    },
+    "dependencies": {
+        "serverless-pseudo-parameters": "^2.5.0"
+    }
+}
