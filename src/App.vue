@@ -24,14 +24,34 @@
       width=300
     >
         <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title class="title">
-              MTG: Virtual Table
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              By <a href="https://github.com/estranged42/mtg-virtual-table">Mark Fischer - @estranged</a>
-            </v-list-item-subtitle>
-          </v-list-item-content>
+          <div class="d-flex flex-no-wrap app-name-header">
+            <v-list-item-content>
+              <v-list-item-title class="title">
+                MTG: Virtual Table
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                By <a href="https://github.com/estranged42/mtg-virtual-table">Mark Fischer - @estranged</a>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-tooltip 
+                right
+                v-if="connection!=null"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="settings=!settings"
+                >
+                  <v-icon>mdi-account-multiple-check</v-icon>
+                </v-btn>
+              </template>
+              <span>Connected to Game Table {{gameid}}</span>
+            </v-tooltip>
+
+          </div>
         </v-list-item>
 
         <v-divider></v-divider>
@@ -39,6 +59,19 @@
         <v-list
           nav
         >
+          <v-list-item
+            link
+            @click="settings=!settings"
+          >
+            <v-list-item-icon>
+              <v-icon left>mdi-cog</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>Settings</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-list-item
             link
             @click="addPlayer"
@@ -88,6 +121,61 @@
         </v-sheet>
       </v-img>
     </v-main>
+
+    <v-dialog
+      v-model="settings"
+      width="500"
+    >
+      <v-card>
+
+        <div v-if="connection!=null">
+          <v-card-title>
+            Connected to Game Table:
+          </v-card-title>
+
+          <v-card-subtitle>
+            <pre>{{ gameid }}</pre>
+          </v-card-subtitle>
+        </div>
+
+        <v-expansion-panels focusable class="settings-panels">
+          <v-expansion-panel>
+            <v-expansion-panel-header>Start a new game table</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-btn
+                color="primary"
+                @click="doHostGame"
+              >
+                Start New Game Table
+              </v-btn>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-expansion-panel-header>Join existing game table</v-expansion-panel-header>
+            <v-expansion-panel-content>
+
+              <v-text-field
+                  v-model="gameid"
+                  label="Enter game ID to join"
+                  outlined
+                  dense
+                  hide-details
+              ></v-text-field>
+
+              <v-btn
+                color="primary"
+                @click="doJoinGame"
+              >
+                Join Game Table
+              </v-btn>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+
+      </v-card>
+    </v-dialog>
+
   </v-app>
 </template>
 
@@ -109,6 +197,9 @@ export default {
   },
 
   data: () => ({
+    gameid: null,
+    settings: false,
+    connection: null,
     drawer: true,
     collapseOnScroll: false,
     players: [
@@ -182,6 +273,7 @@ export default {
   },
   methods: {
     addPlayer() {
+      this.sendWebSocketMessage("new player")
       let p = {id: this.nextPlayerId, name: "New Player"}
       this.players = this.players.concat(p)
       this.nextPlayerId = this.nextPlayerId + 1
@@ -197,12 +289,67 @@ export default {
         this.drawer = false
       }
     },
-    onCut() {}
+    onCut() {},
+    checkWebSocketConnection() {
+      if (this.connection == null) {
+        console.log("Starting connection to WebSocket Server")
+        this.connection = new WebSocket("wss://5mz965txnl.execute-api.us-west-2.amazonaws.com/dev")
+
+        this.connection.onmessage = this.handleIncomingMessage
+
+        this.connection.onopen = function() {
+          console.log("Successfully connected to the echo websocket server...")
+        }
+      }
+    },
+    handleIncomingMessage: function(event) {
+      if (event.data != undefined) {
+        let event_data = JSON.parse(event.data)
+        let action = event_data.action
+        if (action == "host") {
+          this.gameid = event_data.gameid
+          console.log("new game id: " + this.gameid)
+        }
+      } else {
+        console.log(event)
+      }
+    },
+    sendWebSocketMessage(action, message=null) {
+     let msg = {
+        "action": action,
+        "message": message
+      }
+
+      if (this.connection.readyState == 1) {
+        this.connection.send(JSON.stringify(msg))
+      } else {
+        this.connection.addEventListener('open', function deferred_msg() {
+          this.send(JSON.stringify(msg))
+          this.removeEventListener('open', deferred_msg, false)
+        })
+      }
+ 
+    },
+    doHostGame() {
+      this.checkWebSocketConnection()
+      this.sendWebSocketMessage('host')
+      this.settings = false
+    },
+    doJoinGame() {
+      this.checkWebSocketConnection()
+      this.sendWebSocketMessage('join', this.gameid)
+      this.settings = false
+    }
+
   }
 };
 </script>
 
 <style lang="scss">
+
+.app-name-header {
+  align-items: center;
+}
 
 header.mobile-app-bar {
   flex: unset;
@@ -227,13 +374,16 @@ div.mtgvirtualtable {
   filter: brightness(150%) contrast(40%) blur(2px);
 }
 
-
 .card-search {
   width: 400px;
 }
 
 .main-table {
   background-color: #9eabae;
+}
+
+.settings-panels .v-expansion-panel-content {
+  padding-top: 15px;
 }
 
 </style>
