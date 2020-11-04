@@ -7,6 +7,8 @@
     "build": "NODE_ENV=production vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy-aws": "scripts/deploy-aws.sh",
+    "deploy-serverless": "scripts/deploy-serverless.sh",
+    "invoke": "scripts/run-invoke.sh",
     "publish": "scripts/publish.sh"
   },
   "dependencies": {
