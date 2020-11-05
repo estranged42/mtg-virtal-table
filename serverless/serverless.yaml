@@ -48,6 +48,11 @@ provider:
       Action:
         - execute-api:Invoke
       Resource: !Sub "arn:aws:execute-api:${self:provider.region}:*:#{WebsocketsApi}/*"
+    - Effect: Allow
+      Action:
+        - ssm:GetParameter
+        - ssm:PutParameter
+      Resource: !Sub "arn:aws:ssm:${self:provider.region}:#{AWS::AccountId}:parameter${env:SSM_LAST_GAME_ID}"
 
 
 functions:
@@ -65,6 +70,7 @@ functions:
     environment:
       GAMETABLE: ${env:DYNAMODB_TABLE}
       APIGATEWAY_ENDPOINT: !Sub "https://#{WebsocketsApi}.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}"
+      SSM_LAST_GAME_ID: ${env:SSM_LAST_GAME_ID}
 
   joingame:
     handler: joingame.handler

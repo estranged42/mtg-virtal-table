@@ -5,29 +5,12 @@ import traceback
 import sys
 import boto3
 import time
-import pytz
-import uuid
-import base64
+from hashids import Hashids
 from datetime import date, datetime, timedelta, timezone
 import decimal
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-
-if os.getenv("GAMETABLE"):
-    game_table_name = os.getenv("GAMETABLE")
-else:
-    logger.error("Environment Var GAMETABLE Not Set")
-
-if os.getenv("APIGATEWAY_ENDPOINT"):
-    apigateway_endpoint = os.getenv("APIGATEWAY_ENDPOINT")
-else:
-    logger.error("Environment Var APIGATEWAY_ENDPOINT Not Set")
-
-apig = boto3.client('apigatewaymanagementapi', endpoint_url=apigateway_endpoint)
-
-dynamodb = boto3.resource('dynamodb')
-game_table = dynamodb.Table(game_table_name)
 
 
 def json_serial(obj):
@@ -71,6 +54,61 @@ def log_info(message):
     logger.info(json_str)
 
 
+if os.getenv("GAMETABLE"):
+    game_table_name = os.getenv("GAMETABLE")
+    dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
+    game_table = dynamodb.Table(game_table_name)
+else:
+    logger.error("Environment Var GAMETABLE Not Set")
+
+if os.getenv("APIGATEWAY_ENDPOINT"):
+    apigateway_endpoint = os.getenv("APIGATEWAY_ENDPOINT")
+    apig = boto3.client('apigatewaymanagementapi', endpoint_url=apigateway_endpoint, region_name='us-west-2')
+else:
+    logger.error("Environment Var APIGATEWAY_ENDPOINT Not Set")
+
+if os.getenv("SSM_LAST_GAME_ID"):
+    last_game_id_param = os.getenv("SSM_LAST_GAME_ID")
+    ssm = boto3.client('ssm', region_name='us-west-2')
+else:
+    logger.error("Environment Var SSM_LAST_GAME_ID Not Set")
+
+
+def get_parameter(p_name, decrypt=False):
+    try:
+        response = ssm.get_parameter(Name=p_name, WithDecryption=decrypt)
+        v = response['Parameter']['Value']
+        return v
+    except Exception as ex:
+        msg = str(ex)
+        if "ParameterNotFound" in msg:
+            log_info(msg)
+            return None
+        else:
+            raise ex
+
+
+def put_parameter(p_name, value):
+    if type(value) != str:
+        value = str(value)
+    try:
+        response = ssm.put_parameter(
+            Name=p_name,
+            Value=value, 
+            Type='String',
+            Overwrite=True
+        )
+        version = response['Version']
+        return version
+    except Exception as ex:
+        msg = str(ex)
+        if "ParameterNotFound" in msg:
+            log_info(msg)
+            return None
+        else:
+            raise ex
+
+
 def _format_response(message, code=200, **additional_fields):
     response = {
         'message': message
@@ -94,6 +132,20 @@ def _format_response(message, code=200, **additional_fields):
         'body': json_text
     }
     return proxy_response
+
+
+def generate_gameid():
+    last_game_number_param_value = get_parameter(last_game_id_param)
+    if last_game_number_param_value is None:
+        log_error(f"last_game_id_param error: {last_game_number_param_value}")
+        return None
+    last_game_number = int(last_game_number_param_value)
+    next_game_number = last_game_number + 1
+    put_parameter(last_game_id_param, next_game_number)
+    hashids = Hashids(salt=game_table_name, min_length=4, alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+    gameid = hashids.encode(next_game_number)
+    log_info(f"last: {last_game_number}, next: {next_game_number}, gameid: {gameid}")
+    return gameid
 
 
 def get_game(gameid):
@@ -144,7 +196,9 @@ def send_socket_message(message, connection_id, domain_name):
 
 
 def handler(event, context):
+
     logger.info(jsondumps(event))
+
     action = event.get('event', None)
     request_context = event.get('requestContext', None)
     if not request_context:
@@ -174,7 +228,7 @@ def handler(event, context):
 
     if route_key == "$default":
         resp = {}
-        
+
         if not body:
             return _format_response(f'Missing body', 400)
 
@@ -184,10 +238,8 @@ def handler(event, context):
             return _format_response(f'Missing body', 400)
 
         if action == "host":
-            gameid = uuid.uuid1()
-            gameid = base64.b85encode(gameid.bytes)
-            gameid = gameid.decode('utf-8')
-            log_info("save host to new game:")
+            gameid = generate_gameid()
+            log_info(f"save host to new game: {gameid}")
             game = add_player_to_game(gameid, connection_id)
             log_info("returned game:")
             log_info(game)
