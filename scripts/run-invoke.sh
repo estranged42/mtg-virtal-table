@@ -9,7 +9,11 @@ cd "$BASE/serverless/"
 
 sls invoke local \
     --function $1 \
-    --path "$BASE/serverless/events/form-post.json" \
+    --path "$BASE/serverless/events/connect.json" \
+    --env AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+    --env AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+    --env GAMETABLE=$DYNAMODB_TABLE \
+    --env APIGATEWAY_ENDPOINT="https://5mz965txnl.execute-api.us-west-2.amazonaws.com/dev" \
     --docker
 
 cd "$BASE"
