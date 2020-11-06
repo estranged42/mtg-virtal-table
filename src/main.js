@@ -31,7 +31,7 @@ var gamedata = {
     this.state.gameid = newValue
   },
   addPlayer() {
-    let p = {id: this.state.nextPlayerId, name: "New Player"}
+    let p = {id: this.state.nextPlayerId, name: "New Player", health: {val: 20}, cards: []}
     this.state.players = this.state.players.concat(p)
     this.state.nextPlayerId = this.state.nextPlayerId + 1
     if (this.debug) console.log(`Adding player ${p.id}: ${p.name}`)
