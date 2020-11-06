@@ -70,7 +70,7 @@
                     ></v-text-field>
                 </v-toolbar-title>
 
-                <Stepper :count="health" icon="mdi-heart" iconoffset="2"/>
+                <Stepper :count="player.health" icon="mdi-heart" iconoffset="2"/>
 
                 <v-spacer></v-spacer>
 
@@ -87,7 +87,7 @@
             </v-hover>
 
             <drop-list
-                :items="cards"
+                :items="player.cards"
                 class="cards"
                 @insert="onInsert"
                 @reorder="onReorder"
@@ -122,7 +122,7 @@ import Counter from './Counter';
 import Stepper from './Stepper';
 
 export default {
-    props: ['player', 'deleteHandler'],
+    props: ['player'],
     components: {
         Card,
         Counter,
@@ -131,22 +131,20 @@ export default {
         DropList
     },
     data: () => ({
-        cards: [],
         editingPlayerName: false,
         dialog: false,
-        health: {val: 20},
     }),
     methods: {
         onInsert(event) {
             let dataCopy = JSON.parse(JSON.stringify(event.data));
-            this.cards.splice(event.index, 0, dataCopy);
+            this.player.cards.splice(event.index, 0, dataCopy);
         },
         onReorder(event) {
-            event.apply(this.cards)
+            event.apply(this.player.cards)
         },
         remove(value) {
-            let index = this.cards.indexOf(value);
-            this.cards.splice(index, 1);
+            let index = this.player.cards.indexOf(value);
+            this.player.cards.splice(index, 1);
         },
         doEditPlayerName() {
             this.editingPlayerName = true
@@ -160,7 +158,7 @@ export default {
         },
         doDeletePlayer() {
             this.dialog = false
-            this.deleteHandler(this.player)
+            this.$root.$data.deletePlayer(this.player)
         }
     }
 }

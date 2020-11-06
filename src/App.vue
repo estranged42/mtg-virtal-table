@@ -36,7 +36,7 @@
 
             <v-tooltip 
                 right
-                v-if="connection!=null"
+                v-if="$root.$data.connected"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -48,7 +48,7 @@
                   <v-icon>mdi-account-multiple-check</v-icon>
                 </v-btn>
               </template>
-              <span>Connected to Game Table {{gameid}}</span>
+              <span>Connected to Game Table {{ $root.$data.state.gameid }}</span>
             </v-tooltip>
 
           </div>
@@ -113,7 +113,7 @@
         :src="background.filename"
         height="100%"
       >
-        <Table :players="players"/>
+        <Table />
         <v-sheet 
           class="image-credit pa-1"
         >
@@ -128,13 +128,13 @@
     >
       <v-card>
 
-        <div v-if="connection!=null">
+        <div v-if="$root.$data.connected">
           <v-card-title>
             Connected to Game Table:
           </v-card-title>
 
           <v-card-subtitle>
-            <pre>{{ gameid }}</pre>
+            <pre>{{ $root.$data.state.gameid }}</pre>
           </v-card-subtitle>
         </div>
 
@@ -156,7 +156,7 @@
             <v-expansion-panel-content>
 
               <v-text-field
-                  v-model="gameid"
+                  v-model="$root.$data.state.gameid"
                   label="Enter game ID to join"
                   outlined
                   dense
@@ -197,16 +197,11 @@ export default {
   },
 
   data: () => ({
-    gameid: null,
     settings: false,
     connection: null,
+    connected: false,
     drawer: true,
     collapseOnScroll: false,
-    players: [
-        {id: 1, name: "Player One"},
-        {id: 2, name: "Player Two"},
-    ],
-    nextPlayerId: 3,
     background: { credit: "", url: "", filename: "", blurhash: "" },
     backgroundImages: [
       {
@@ -273,10 +268,8 @@ export default {
   },
   methods: {
     addPlayer() {
-      this.sendWebSocketMessage("new player")
-      let p = {id: this.nextPlayerId, name: "New Player"}
-      this.players = this.players.concat(p)
-      this.nextPlayerId = this.nextPlayerId + 1
+      if (this.connected) this.sendWebSocketMessage("new player")
+      this.$root.$data.addPlayer()
     },
     onDragStart(event) {
       let counterSource = event.source.data
@@ -290,54 +283,14 @@ export default {
       }
     },
     onCut() {},
-    checkWebSocketConnection() {
-      if (this.connection == null) {
-        console.log("Starting connection to WebSocket Server")
-        this.connection = new WebSocket("wss://5mz965txnl.execute-api.us-west-2.amazonaws.com/dev")
-
-        this.connection.onmessage = this.handleIncomingMessage
-
-        this.connection.onopen = function() {
-          console.log("Successfully connected to the echo websocket server...")
-        }
-      }
-    },
-    handleIncomingMessage: function(event) {
-      if (event.data != undefined) {
-        let event_data = JSON.parse(event.data)
-        let action = event_data.action
-        if (action == "host") {
-          this.gameid = event_data.gameid
-          console.log("new game id: " + this.gameid)
-        }
-      } else {
-        console.log(event)
-      }
-    },
-    sendWebSocketMessage(action, message=null) {
-     let msg = {
-        "action": action,
-        "message": message
-      }
-
-      if (this.connection.readyState == 1) {
-        this.connection.send(JSON.stringify(msg))
-      } else {
-        this.connection.addEventListener('open', function deferred_msg() {
-          this.send(JSON.stringify(msg))
-          this.removeEventListener('open', deferred_msg, false)
-        })
-      }
- 
-    },
     doHostGame() {
-      this.checkWebSocketConnection()
-      this.sendWebSocketMessage('host')
+      this.$root.$data.checkWebSocketConnection()
+      this.$root.$data.sendWebSocketMessage('host')
       this.settings = false
     },
     doJoinGame() {
-      this.checkWebSocketConnection()
-      this.sendWebSocketMessage('join', this.gameid)
+      this.$root.$data.checkWebSocketConnection()
+      this.$root.$data.sendWebSocketMessage('join', this.$root.$data.state.gameid)
       this.settings = false
     }
 

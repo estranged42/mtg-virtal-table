@@ -1,8 +1,8 @@
 <template>
     <v-container class="players">
         <v-row>
-            <v-col v-for="p in players" :key="p.id" class="players-list">
-                <Player :player="p" :deleteHandler="deletePlayer" />
+            <v-col v-for="p in $root.$data.state.players" :key="p.id" class="players-list">
+                <Player :player="p"/>
             </v-col>
         </v-row>
     </v-container>
@@ -19,23 +19,9 @@ export default {
         //Drag,
         //DropList
     },
-    props: ['players'],
     data: () => ({
 
-    }),
-    methods: {
-        onInsert(event) {
-            this.players.splice(event.index, 0, event.data);
-        },
-        onReorder(event) {
-            event.apply(this.players)
-        },
-        deletePlayer(player) {
-            console.log(`Deleting player ${player.name}`)
-            let index = this.players.indexOf(player);
-            this.players.splice(index, 1);
-        }
-    }
+    })
 }
 </script>
 
