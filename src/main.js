@@ -35,11 +35,13 @@ var gamedata = {
     this.state.players = this.state.players.concat(p)
     this.state.nextPlayerId = this.state.nextPlayerId + 1
     if (this.debug) console.log(`Adding player ${p.id}: ${p.name}`)
+    this.sendGameData()
   },
   deletePlayer(player) {
     if (this.debug) console.log(`Deleting player ${player.id}: ${player.name}`)
     let index = this.state.players.indexOf(player);
     this.state.players.splice(index, 1);
+    this.sendGameData()
   },
   checkWebSocketConnection() {
     if (this.connection == null) {
@@ -60,30 +62,42 @@ var gamedata = {
       let event_data = JSON.parse(event.data)
       let action = event_data.action
       if (action == "host") {
+        if (_gamedata.debug) console.log("new game id: " + event_data.gameid)
         _gamedata.state.gameid = event_data.gameid
-        if (_gamedata.debug) console.log("new game id: " + _gamedata.state.gameid)
+
+      } else if (action == "join") {
+        _gamedata.state = event_data.gamedata
+        if (_gamedata.debug) console.log("joined game: " + _gamedata.state.gameid)
+
+      } else if (action == "sendstate") {
+        if (_gamedata.debug) console.log("confirm new state sent")
+
+      } else if (action == "updatestate") {
+        if (_gamedata.debug) console.log("new state received")
+        _gamedata.state = event_data.gamedata
       }
+
     } else {
       if (_gamedata.debug) console.log(event)
     }
   },
   sendWebSocketMessage(action, message=null) {
-   let msg = {
-      "action": action,
-      "message": message
-    }
+    if (this.connection) {
+      let msg = {
+          "action": action,
+          "message": message
+        }
+        if (this.debug) console.log(`Sending Message: ${msg.action}`)
 
-    if (this.connection.readyState == 1) {
-      if (this.debug) console.log("Sending Message: " + JSON.stringify(msg))
-      this.connection.send(JSON.stringify(msg))
-    } else {
-      this.connection.addEventListener('open', function deferred_msg() {
-        if (this.debug) console.log("Sending Message: " + JSON.stringify(msg))
-        this.send(JSON.stringify(msg))
-        this.removeEventListener('open', deferred_msg, false)
-      })
-    }
-
+        if (this.connection.readyState == 1) {
+          this.connection.send(JSON.stringify(msg))
+        } else {
+          this.connection.addEventListener('open', function deferred_msg() {
+            this.send(JSON.stringify(msg))
+            this.removeEventListener('open', deferred_msg, false)
+          })
+        }
+      }
   },
   sendGameData() {
     this.sendWebSocketMessage("sendstate", this.state)

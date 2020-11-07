@@ -52,6 +52,7 @@ export default {
     methods: {
         updateCount(inc) {
             this.count.val = this.count.val + inc
+            this.$root.$data.sendGameData()
         }
     }
 }

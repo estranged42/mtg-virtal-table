@@ -162,29 +162,70 @@ def get_game(gameid):
         return None
 
 
+def put_game(game):
+    expiration_time = time.time() + 3600
+    game['expiration'] = decimal.Decimal(expiration_time)
+    put_result = game_table.put_item(
+        Item=game
+    )
+
 def add_player_to_game(gameid, connection_id):
     expiration_time = time.time() + 3600
     game = get_game(gameid)
     if game is None:
-        players = [connection_id]
-        gamedata = {}
+        game = {
+            "gameid": gameid,
+            "players": [connection_id],
+            "gamedata": {},
+            "expiration": decimal.Decimal(expiration_time)
+        }
     else:
         players = game.get('players', [])
         if connection_id not in players:
             players.append(connection_id)
-        gamedata = game.get('gamedata', {})
+        game['players'] = players
     
-    put_result = game_table.put_item(
-        Item={
-            "gameid": gameid,
-            "players": players,
-            "gamedata": gamedata,
-            "expiration": decimal.Decimal(expiration_time)
-        }
-    )
+    put_result = put_game(game)
 
     game = get_game(gameid)
     return game
+
+
+def remove_player_from_game(gameid, connection_id):
+    expiration_time = time.time() + 3600
+    game = get_game(gameid)
+    if game is not None:
+        players = game.get('players', [])
+        if connection_id in players:
+            players.remove(connection_id)
+            log_info(f"Removed {connection_id} from game {gameid}")
+        game['players'] = players
+    
+    put_result = put_game(game)
+
+    game = get_game(gameid)
+    return game
+
+
+def update_other_players(game, connection_id, domain_name):
+    players = game.get('players', [])
+    gameid = game['gameid']
+    for p in players:
+        if p != connection_id:
+            try:
+                resp = {
+                    "action": "updatestate",
+                    "gameid": gameid,
+                    "gamedata": game['gamedata']
+                }
+                send_socket_message(resp, p, domain_name)
+            except Exception as ex:
+                msg = str(ex)
+                if "GoneException" in msg:
+                    log_info(f"Player {connection_id} is gone from game {gameid}")
+                    remove_player_from_game(gameid, p)
+                else:
+                    raise ex
 
 
 def send_socket_message(message, connection_id, domain_name):
@@ -252,7 +293,7 @@ def handler(event, context):
             }
 
         if action == "join":
-            gameid = body.get('gameid', None)
+            gameid = body.get('message', None)
             if gameid is None:
                 return _format_response(f'Missing gameid for join', 400)
 
@@ -266,8 +307,37 @@ def handler(event, context):
             resp = {
                 "action": "join",
                 "gameid": gameid,
+                "numplayers": numplayers,
+                "gamedata": game['gamedata']
+            }
+
+        if action == "sendstate":
+            new_game_data = body.get('message', None)
+            if new_game_data is None:
+                return _format_response(f'No new gamedata to set', 400)
+
+            log_info(new_game_data)
+
+
+            gameid = new_game_data.get('gameid', None)
+            if gameid is None:
+                return _format_response(f'Missing gameid for sendstate', 400)
+
+            game = get_game(gameid)
+            if game is None:
+                return _format_response(f'Invalid gameid', 400)
+            
+            game['gamedata'] = new_game_data
+            numplayers = len(game['players'])
+            put_game(game)
+
+            resp = {
+                "action": "sendstate",
+                "gameid": gameid,
                 "numplayers": numplayers
             }
+
+            update_other_players(game, connection_id, domain_name)
 
         send_socket_message(resp, connection_id, domain_name)
         return _format_response(resp, 200)

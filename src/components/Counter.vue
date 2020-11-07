@@ -67,6 +67,7 @@ export default {
         },
         endEditCounterName() {
             this.editingCounterName = false
+            this.$root.$data.sendGameData()
         },
         doClose() {
             if (this.closefn != undefined) {

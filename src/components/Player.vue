@@ -138,13 +138,16 @@ export default {
         onInsert(event) {
             let dataCopy = JSON.parse(JSON.stringify(event.data));
             this.player.cards.splice(event.index, 0, dataCopy);
+            this.$root.$data.sendGameData()
         },
         onReorder(event) {
             event.apply(this.player.cards)
+            this.$root.$data.sendGameData()
         },
         remove(value) {
             let index = this.player.cards.indexOf(value);
             this.player.cards.splice(index, 1);
+            this.$root.$data.sendGameData()
         },
         doEditPlayerName() {
             this.editingPlayerName = true
@@ -155,10 +158,12 @@ export default {
         },
         endEditPlayerName() {
             this.editingPlayerName = false
+            this.$root.$data.sendGameData()
         },
         doDeletePlayer() {
             this.dialog = false
             this.$root.$data.deletePlayer(this.player)
+            this.$root.$data.sendGameData()
         }
     }
 }
