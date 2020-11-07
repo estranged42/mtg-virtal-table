@@ -5,7 +5,10 @@ cards, we couldn't see everyone else's cards. With just two players, we could ke
 OK, but once you got to 3 or 4 players, it was a lost cause.
 
 This tool allows one person to keep track of everyone's cards as they get played. They can then share their screen
-so everyone can follow along.
+so everyone can follow along. Additionally you can choose to share your table with others by hosting a new game. Give
+your game table ID to your friends and they can join and participate in the same table. There's no fancy permissions
+or accounts, anyone who has joined the table has full controll over the shared game. Game tables expire after an hour
+of inactivity.
 
 See the [MTG: Virtual Table][mtgvirtual] site for an example. (Or just use this tool from there!)
 
@@ -13,7 +16,7 @@ See the [MTG: Virtual Table][mtgvirtual] site for an example. (Or just use this 
 
 ## Features
 
-* Multiple players
+* Multi-player shared virtual tables
 * Life tracking
 * Card lookup courtesy of the [Scryfall API][scryfall]
 * Customizable counter/token widgets
@@ -25,12 +28,22 @@ See the [MTG: Virtual Table][mtgvirtual] site for an example. (Or just use this 
 
 ## Architecture
 
+### Front End
+
 This is a [Vue.js][vuejs] application that uses the [Vuetify][vuetify] UI library, [Vue Easy-DnD][easydnd], and the [blurhash][] library.
 
 [vuejs]: https://vuejs.org/v2/guide/
 [vuetify]: https://vuetifyjs.com/en/getting-started/installation/
 [easydnd]: https://github.com/rlemaigre/Easy-DnD
 [blurhash]: https://github.com/woltapp/blurhash/tree/master/TypeScript
+
+### Back End
+
+The back end components track and update the shared game data for tables. This is a serverless architecture deployed in AWS.
+
+* API Gateway - handles websocket connections from clients
+* Lambda - Logic for hosting, joining, storing, and updating game data
+* DynamoDB - Store game data
 
 ## Development
 
@@ -56,7 +69,7 @@ yarn build
 yarn lint
 ```
 
-## Deployment
+## Deployment - Front End
 
 This project contains an AWS CloudFormation template to deploy an environment to host the static website files. It uses
 an S3 bucket with CloudFront to handle SSL termination. You don't have to deploy this tool to AWS, any web host that can
@@ -66,7 +79,6 @@ want to host it (or just keep it local).
 Deploying a site to [S3/CloudFront is not free][cloudfrontblog], but for a site that receives pretty low traffic, it is pretty cheap.
 
 [cloudfrontblog]: https://aws.amazon.com/blogs/networking-and-content-delivery/amazon-s3-amazon-cloudfront-a-match-made-in-the-cloud/
-
 
 ### Deployment pre-requisites
 
@@ -118,3 +130,10 @@ Note, there is a limit on how many CloudFront invalidations you can perform for 
 the [CloudFront costs][cloudfront] for details. Just don't setup some sort of bot that automatically publishes 24/7. :) 
 
 [cloudfront]: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#PayingForInvalidation
+
+
+## Deployment - Back End
+
+The backend components are organized and deployed using the [serverless framework][serverless]. 
+
+too tired, will write more later!
