@@ -22,6 +22,7 @@
       dark
       src="images/wood-background2-sm.jpg"
       width=300
+      class="mtgappdrawer"
     >
         <v-list-item>
           <div class="d-flex flex-no-wrap app-name-header">
@@ -54,11 +55,12 @@
           </div>
         </v-list-item>
 
-        <v-divider></v-divider>
 
         <v-list
           nav
         >
+          <v-divider></v-divider>
+
           <v-list-item
             link
             @click="settings=!settings"
@@ -96,7 +98,7 @@
 
         </v-list>
 
-        <div>
+        <div class="card-search-container">
             <CardSearch @beginCardSearchDrag="doCloseDrawer"/>
         </div>
 
@@ -333,6 +335,12 @@ div.mtgvirtualtable {
 
 .main-table {
   background-color: #9eabae;
+}
+
+.mtgappdrawer {
+  .v-navigation-drawer__content {
+    overflow-y: hidden;
+  }
 }
 
 .settings-panels .v-expansion-panel-content {

@@ -69,7 +69,7 @@
                 <v-img 
                     :src="carddata.image_uris.png"
                     :lazy-src="carddata.image_uris.small"
-                    max-width=250
+                    width=250
                 ></v-img>
             </div>
         </v-card>

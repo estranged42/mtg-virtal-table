@@ -12,8 +12,9 @@
         ></v-text-field>
 
         <v-simple-table
-            height="300"
+            :height="searchResultsHeight"
             class="pa-2 search-table"
+            ref="searchtable"
         >
             <template v-slot:default>
                 <tr
@@ -48,6 +49,7 @@ export default {
         search: null,
         select: null,
         inputWait: false,
+        searchResultsHeight: 400,
         headers: [{ text: 'Card', value: 'card' }]
     }),
     watch: {
@@ -113,8 +115,25 @@ export default {
         },
         setError: (errText) => {
             console.log(errText)
+        },
+        onResize() {
+            let searchResults = this.$refs.searchtable
+            let elTop = searchResults.$el.offsetTop
+            let windowHeight = window.innerHeight
+            this.searchResultsHeight = windowHeight - elTop
+            if (this.$root.$data.debug) console.log(`Window Resize: ${windowHeight}`)
+            if (this.$root.$data.debug) console.log(searchResults)
         }
-    }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+            this.onResize()
+        })
+    },
+    beforeDestroy() { 
+        window.removeEventListener('resize', this.onResize); 
+    },
 }
 </script>
 
