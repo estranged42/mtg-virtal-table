@@ -78,10 +78,25 @@ export default {
                     if (data.total_cards > 0) {
                         let cards = data.data
                         cards.forEach(element => (function(scope){
-                            element.table_card_id = scope.getCardId()
-                            element.drag_type = "card"
                             // console.log(element)
-                            scope.items = scope.items.concat(element)
+                            let new_card = {
+                                "table_card_id": scope.getCardId(),
+                                "drag_type": "card",
+                                "name": element.name,
+                                "oracle_text": element.oracle_text,
+                                "flavor_text": element.flavor_text,
+                                "mana_cost": element.mana_cost,
+                                "type_line": element.type_line,
+                                "color_identity": element.color_identity,
+                                "power": element.power,
+                                "toughness": element.toughness,
+                                "image_uris": {
+                                    "art_crop": element.image_uris.art_crop,
+                                    "png": element.image_uris.png,
+                                    "small": element.image_uris.small
+                                }
+                            }
+                            scope.items = scope.items.concat(new_card)
                         })(this));
                     }
                     this.loading = false
