@@ -26,6 +26,14 @@ See the [MTG: Virtual Table][mtgvirtual] site for an example. (Or just use this 
 
 ![Image of Virtual Table](docs/table.png)
 
+## ToDo
+
+* Handle PayloadTooLargeException in PostToConnection
+* Mesage alert system
+* Game history drawer
+* Better card detail view (newlines, iconize mana/taps, etc)
+
+
 ## Architecture
 
 ### Front End
