@@ -8,7 +8,7 @@ Vue.config.productionTip = false
 let _gamedata = undefined
 
 var gamedata = {
-  debug: true,
+  debug: process.env.NODE_ENV == "development",
   connection: null,
   connected: false,
   state: {
@@ -27,7 +27,7 @@ var gamedata = {
   getCardId() {
     let id = this.state.nextCardId
     this.state.nextCardId = id + 1
-    console.log(`card id: ${id}`)
+    if (this.debug) console.log(`card id: ${id}`)
     return id
   },
   addPlayer() {
