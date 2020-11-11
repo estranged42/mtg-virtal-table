@@ -5,13 +5,6 @@ import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
 
-let next_card_id = 1
-Vue.prototype.getCardId = function() {
-  let id = next_card_id
-  next_card_id = id + 1
-  return id
-}
-
 let _gamedata = undefined
 
 var gamedata = {
@@ -21,6 +14,7 @@ var gamedata = {
   state: {
     gameid: "0000",
     nextPlayerId: 3,
+    nextCardId: 100,
     players: [
         {id: 1, name: "Player One", health: {val: 20}, cards: []},
         {id: 2, name: "Player Two", health: {val: 20}, cards: []},
@@ -29,6 +23,12 @@ var gamedata = {
   setGameID(newValue) {
     if (this.debug) console.log('setGameID triggered with', newValue)
     this.state.gameid = newValue
+  },
+  getCardId() {
+    let id = this.state.nextCardId
+    this.state.nextCardId = id + 1
+    console.log(`card id: ${id}`)
+    return id
   },
   addPlayer() {
     let p = {id: this.state.nextPlayerId, name: "New Player", health: {val: 20}, cards: []}

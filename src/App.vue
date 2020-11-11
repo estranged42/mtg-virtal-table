@@ -254,7 +254,7 @@ export default {
   mounted() {
     let r = Math.floor( Math.random() * this.backgroundImages.length )
     this.background = this.backgroundImages[r]
-    this.counterData.table_card_id = this.getCardId()
+    this.counterData.table_card_id = this.$root.$data.getCardId()
 
     const width = 300
     const height = 150
@@ -275,7 +275,7 @@ export default {
     },
     onDragStart(event) {
       let counterSource = event.source.data
-      counterSource.table_card_id = this.getCardId()
+      counterSource.table_card_id = this.$root.$data.getCardId()
       this.doCloseDrawer()
       // console.log(event)
     },

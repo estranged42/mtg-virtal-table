@@ -80,7 +80,7 @@ export default {
                         cards.forEach(element => (function(scope){
                             // console.log(element)
                             let new_card = {
-                                "table_card_id": scope.getCardId(),
+                                "table_card_id": scope.$root.$data.getCardId(),
                                 "drag_type": "card",
                                 "name": element.name,
                                 "oracle_text": element.oracle_text,
