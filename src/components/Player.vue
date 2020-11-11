@@ -95,13 +95,13 @@
                 mode="cut"
             >
                 <template v-slot:item="{item}">
-                    <drag class="item" :key="getCardId()" :data="item" @cut="remove(item)">
+                    <drag class="item" :key="item.table_card_id" :data="item" @cut="remove(item)">
                         <Card v-if="item.drag_type=='card'" v-bind:carddata="item" :closefn="remove"/>
                         <Counter v-if="item.drag_type=='counter'" :counterdata="item" :closefn="remove"/>
                     </drag>
                 </template>
                 <template v-slot:feedback="{data}">
-                    <div class="item feedback" :key="getCardId()">
+                    <div class="item feedback" :key="data.table_card_id">
                         <Card v-if="data.drag_type=='card'" v-bind:carddata="data"/>
                         <Counter v-if="data.drag_type=='counter'" :counterdata="data"/>
                     </div>
