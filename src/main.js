@@ -64,6 +64,8 @@ var gamedata = {
       if (action == "host") {
         if (_gamedata.debug) console.log("new game id: " + event_data.gameid)
         _gamedata.state.gameid = event_data.gameid
+        // Be sure to send over the game data after receiving host confirmation
+        _gamedata.sendGameData()
 
       } else if (action == "join") {
         _gamedata.state = event_data.gamedata
