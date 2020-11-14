@@ -1,5 +1,5 @@
 <template>
-    <v-container class="players">
+    <v-container class="players" flex>
         <v-row>
             <v-col v-for="p in $root.$data.state.players" :key="p.id" class="players-list">
                 <Player :player="p"/>
@@ -27,6 +27,9 @@ export default {
 
 <style scoped lang="scss">
 
+div.players {
+    max-width: unset;
+}
 .players-list {
     min-width: 380px;
     flex-grow: 0.5;

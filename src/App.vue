@@ -21,7 +21,7 @@
       app
       dark
       src="images/wood-background2-sm.jpg"
-      width=300
+      width=275
       class="mtgappdrawer"
     >
         <v-list-item>

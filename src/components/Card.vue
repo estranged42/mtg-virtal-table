@@ -8,46 +8,73 @@
         <template v-slot:activator="{ on, attrs }">
             <v-hover>
                 <template v-slot:default="{ hover }">
+                    <div>
                     <v-card
                         class="card_card"
                         v-bind="attrs"
                         v-on="on"
+                        dark
+                        @contextmenu="showContextMenu"
                     >
                         <div class="d-flex flex-no-wrap">
                             <v-img 
                                 :src="carddata.image_uris.art_crop"
-                                max-width=50
+                                width=100%
+                                max-width=350
                                 max-height=50
                                 min-height="50"
-                                min-width="50"
-                            ></v-img>
-
-                            <div>
-                                <v-card-title>
-                                    {{ carddata.name }} 
-                                    <ManaCost :cost="carddata.mana_cost"/>
-                                </v-card-title>
-
-                                <v-card-text>
-                                    {{ carddata.type_line }} 
-                                </v-card-text>
-                            </div>
-
-                            <v-btn
-                                v-show="closefn && hover"
-                                icon
-                                x-small
-                                color="grey"
-                                class="close-btn"
-                                @click="doClose"
                             >
-                                <v-icon>mdi-close-circle</v-icon>
-                            </v-btn>
+                                <div>
+                                    <v-card-title>
+                                        {{ carddata.name }} 
+                                        <ManaCost :cost="carddata.mana_cost"/>
+                                    </v-card-title>
+
+                                    <v-card-text>
+                                        {{ carddata.type_line }} 
+                                    </v-card-text>
+                                </div>
+
+                                <v-btn
+                                    v-show="closefn && hover"
+                                    icon
+                                    x-small
+                                    color="grey"
+                                    class="close-btn"
+                                    @click="doClose"
+                                >
+                                    <v-icon>mdi-close-circle</v-icon>
+                                </v-btn>
+                            </v-img>
                         </div>
                     </v-card>
 
+                    <v-menu
+                        v-model="showMenu"
+                        :position-x="menux"
+                        :position-y="menuy"
+                        absolute
+                        offset-y
+                        v-if="closable"
+                        >
+                        <v-list nav dense>
+                            <v-list-item-group
+                                color="primary"
+                            >
+                                <v-list-item @click="doClose">
+                                    <v-list-item-title>Delete Card</v-list-item-title>
+                                </v-list-item>
+
+                                <v-list-item v-if="duplicatefn != undefined" @click="doDuplicate">
+                                    <v-list-item-title>Duplicate Card</v-list-item-title>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
+                    </v-menu>
+                    
+                    </div>
                 </template>
-            </v-hover>            
+            </v-hover>        
         </template>
 
         <v-card
