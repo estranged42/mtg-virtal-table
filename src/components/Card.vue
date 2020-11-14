@@ -73,6 +73,7 @@
                 ></v-img>
             </div>
         </v-card>
+
     </v-tooltip>
 </template>
 
@@ -82,13 +83,17 @@ import ManaCost from './ManaCost';
 export default {
     props: {
         carddata: undefined,
-        closefn: undefined   
+        closefn: undefined,
+        duplicatefn: undefined
     },
     components: {
         ManaCost,
     },
     data: () => ({
-        closable: false
+        closable: false,
+        showMenu: false,
+        menux: 0,
+        menuy: 0,
     }),
     created() {
         if (this.closefn != undefined) {
@@ -100,7 +105,21 @@ export default {
             if (this.closefn != undefined) {
                 this.closefn(this.carddata)
             }
-        }
+        },
+        doDuplicate() {
+            if (this.duplicatefn != undefined) {
+                this.duplicatefn(this.carddata)
+            }
+        },
+        showContextMenu(event) {
+            event.preventDefault()
+            this.showMenu = false
+            this.menux = event.clientX
+            this.menuy = event.clientY
+            this.$nextTick(() => {
+                this.showMenu = true
+            })
+        },
     }
 }
 </script>
@@ -114,7 +133,13 @@ export default {
 .card_card {
     position: relative;
     margin: 2px;
+    text-shadow: 0 0 0.4em black;
 }
+
+.card_card .v-image__image {
+  filter: brightness(80%) contrast(80%);
+}
+
 
 .card_card .v-chip__content {
     width: 100%;

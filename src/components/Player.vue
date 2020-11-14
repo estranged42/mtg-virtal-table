@@ -96,7 +96,7 @@
             >
                 <template v-slot:item="{item}">
                     <drag class="item" :key="item.table_card_id" :data="item" @cut="remove(item)" :disabled="$vuetify.breakpoint.mobile">
-                        <Card v-if="item.drag_type=='card'" v-bind:carddata="item" :closefn="remove"/>
+                        <Card v-if="item.drag_type=='card'" v-bind:carddata="item" :closefn="remove" :duplicatefn="onDuplicate"/>
                         <Counter v-if="item.drag_type=='counter'" :counterdata="item" :closefn="remove"/>
                     </drag>
                 </template>
@@ -137,6 +137,12 @@ export default {
     methods: {
         onInsert(event) {
             let dataCopy = JSON.parse(JSON.stringify(event.data));
+            this.player.cards.splice(event.index, 0, dataCopy);
+            this.$root.$data.sendGameData()
+        },
+        onDuplicate(card) {
+            let dataCopy = JSON.parse(JSON.stringify(card));
+            dataCopy.table_card_id = this.$root.$data.getCardId()
             this.player.cards.splice(event.index, 0, dataCopy);
             this.$root.$data.sendGameData()
         },
