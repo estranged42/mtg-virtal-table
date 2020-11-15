@@ -85,6 +85,9 @@ export default {
                                     "art_crop": element.image_uris.art_crop,
                                     "png": element.image_uris.png,
                                     "small": element.image_uris.small
+                                },
+                                "related_uris": {
+                                    "gatherer": element.related_uris.gatherer
                                 }
                             }
                             scope.items = scope.items.concat(new_card)

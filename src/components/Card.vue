@@ -56,9 +56,11 @@
                         :position-y="menuy"
                         absolute
                         offset-y
+                        dark
                         v-if="closable"
-                        >
-                        <v-list nav dense>
+                        
+                    >
+                        <v-list nav dense class="card-context-menu">
                             <v-list-item-group
                                 color="primary"
                             >
@@ -69,6 +71,13 @@
                                 <v-list-item v-if="duplicatefn != undefined" @click="doDuplicate">
                                     <v-list-item-title>Duplicate Card</v-list-item-title>
                                 </v-list-item>
+
+                                <a :href="carddata.related_uris.gatherer" target="_new">
+                                <v-list-item>
+                                    <v-list-item-title>View at Gatherer</v-list-item-title>
+                                </v-list-item>
+                                </a>
+                                
                             </v-list-item-group>
                         </v-list>
                     </v-menu>
@@ -225,14 +234,21 @@ export default {
     background: none;
 }
 
+.card_details .v-card__title {
+    word-break: break-word;
+}
+
 .card_details .descriptive-text {
     width: 250px;
-
 }
 
 .oracle-text .mana_cost {
     position: relative;
     top: 3px;
+}
+
+.card-context-menu a {
+    text-decoration: none;
 }
 
 </style>
