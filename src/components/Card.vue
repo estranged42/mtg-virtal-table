@@ -3,7 +3,7 @@
     <v-tooltip 
         right
         content-class="card_wrapper"
-        open-delay="600"
+        open-delay="900"
     >
         <template v-slot:activator="{ on, attrs }">
             <v-hover>
@@ -89,9 +89,7 @@
                     v-text="carddata.name"
                     ></v-card-title>
 
-                    <v-card-text>
-                        {{ carddata.oracle_text }}
-                    </v-card-text>
+                    <v-card-text v-html="oracle_text_enhanced" class="oracle-text"></v-card-text>
                 </div>
 
                 <v-img 
@@ -122,10 +120,26 @@ export default {
         showMenu: false,
         menux: 0,
         menuy: 0,
+        oracle_text_enhanced: "",
     }),
     created() {
         if (this.closefn != undefined) {
             this.closable = true
+        }
+
+        const regex = /({[0-9WBRGUTXC/]+})/g;
+        let matches = this.carddata.oracle_text.match(regex)
+        this.oracle_text_enhanced = this.carddata.oracle_text
+        this.oracle_text_enhanced = this.oracle_text_enhanced.replace("\n", "<br>")
+        if (matches) {
+            for (let index = 0; index < matches.length; index++) {
+                let m = matches[index];
+                let m2 = m.replace("/", "")
+                m2 = m2.replace("{", "")
+                m2 = m2.replace("}", "")
+                let t = `<div class='mana_cost mana_icon_${m2}'></div>`
+                this.oracle_text_enhanced = this.oracle_text_enhanced.replace(m, t)
+            }
         }
     },
     methods: {
@@ -214,6 +228,11 @@ export default {
 .card_details .descriptive-text {
     width: 250px;
 
+}
+
+.oracle-text .mana_cost {
+    position: relative;
+    top: 3px;
 }
 
 </style>

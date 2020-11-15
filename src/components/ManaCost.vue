@@ -16,11 +16,12 @@ export default {
         mana_costs: []
     }),
     created() {
-        const regex = /([0-9WBRGU]+)/g;
+        const regex = /([0-9WBRGUX/]+)/g;
         let matches = this.cost.match(regex)
         if (matches) {
             for (let index = 0; index < matches.length; index++) {
-                const element = matches[index];
+                let element = matches[index];
+                element = element.replace("/", "")
                 let m = {id: index, class: `mana_cost mana_icon_${element}`}
                 this.mana_costs = this.mana_costs.concat(m)
             }
@@ -171,11 +172,12 @@ export default {
     background-position: 0px -496px;
 }
 
+
 .mana_icon_snow {
     background-position: 0px -512px;
 }
 
-.mana_icon_tap {
+.mana_icon_T {
     background-position: 0px -528px;
 }
 
@@ -209,6 +211,10 @@ export default {
 
 .mana_icon_X {
     background-position: 0px -656px;
+}
+
+.mana_icon_C {
+    background-position: 0px -672px;
 }
 
 
