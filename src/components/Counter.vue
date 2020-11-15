@@ -87,6 +87,7 @@ export default {
 
 .counter .v-card__title {
     padding: 0px 5px;
+    font-size: 1rem;
 }
 
 .counter .close-btn {

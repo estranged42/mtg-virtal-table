@@ -11,24 +11,15 @@
             hide-details
         ></v-text-field>
 
-        <v-simple-table
-            :height="searchResultsHeight"
-            class="pa-2 search-table"
+        <div
+            class="search-table-container"
             ref="searchtable"
+            :style="{ height: searchResultsHeight + 'px' }"
         >
-            <template v-slot:default>
-                <tr
-                    v-for="item in items"
-                    :key="item.oracle_id"
-                >
-                    <td>
-                        <drag :key="item.table_card_id" :data="item" @dragstart="onDragStart" @cut="onCut">
-                            <Card v-bind:carddata="item"/>
-                        </drag>
-                    </td>
-                </tr>
-            </template>
-        </v-simple-table>
+            <drag v-for="item in items" :key="item.table_card_id" :data="item" @dragstart="onDragStart" @cut="onCut">
+                <Card v-bind:carddata="item"/>
+            </drag>
+        </div>
     </div>
     
 </template>
@@ -133,7 +124,7 @@ export default {
         },
         onResize() {
             let searchResults = this.$refs.searchtable
-            let elTop = searchResults.$el.offsetTop
+            let elTop = searchResults.offsetTop
             let windowHeight = window.innerHeight
             this.searchResultsHeight = windowHeight - elTop
             if (this.$root.$data.debug) console.log(`Window Resize: ${windowHeight}`)
@@ -154,10 +145,9 @@ export default {
 
 <style lang="scss">
 
-.search-table {
-    .v-data-table__wrapper {
-        overflow-x: hidden;
-    }
+.search-table-container {
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 </style>

@@ -21,13 +21,14 @@
                                 :src="carddata.image_uris.art_crop"
                                 width=100%
                                 max-width=350
-                                max-height=50
-                                min-height="50"
+                                max-height=65
+                                min-height="65"
                             >
                                 <div>
+                                    <ManaCost :cost="carddata.mana_cost"/>
+
                                     <v-card-title>
                                         {{ carddata.name }} 
-                                        <ManaCost :cost="carddata.mana_cost"/>
                                     </v-card-title>
 
                                     <v-card-text>
@@ -177,6 +178,7 @@ export default {
     font-size: 1rem;
     line-height: 1rem;
     padding: 0;
+    word-break: break-word;
 }
 
 .card_card .v-card__text {
@@ -193,7 +195,8 @@ export default {
 }
 
 .card_card .mana_costs_container {
-    margin: 0px 5px;
+    margin: 5px 5px;
+    float: right;
 }
 
 .card_card .close-btn {
