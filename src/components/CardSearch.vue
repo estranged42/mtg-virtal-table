@@ -70,21 +70,26 @@ export default {
                         let cards = data.data
                         cards.forEach(element => (function(scope){
                             // console.log(element)
+                            // Figure out how to handle dual-face cards
+                            let card_face = element
+                            if (element.card_faces != undefined) {
+                                card_face = element.card_faces[0]
+                            }
                             let new_card = {
                                 "table_card_id": scope.$root.$data.getCardId(),
                                 "drag_type": "card",
                                 "name": element.name,
-                                "oracle_text": element.oracle_text,
-                                "flavor_text": element.flavor_text,
-                                "mana_cost": element.mana_cost,
+                                "oracle_text": card_face.oracle_text,
+                                "flavor_text": card_face.flavor_text,
+                                "mana_cost": card_face.mana_cost,
                                 "type_line": element.type_line,
                                 "color_identity": element.color_identity,
                                 "power": element.power,
                                 "toughness": element.toughness,
                                 "image_uris": {
-                                    "art_crop": element.image_uris.art_crop,
-                                    "png": element.image_uris.png,
-                                    "small": element.image_uris.small
+                                    "art_crop": card_face.image_uris.art_crop,
+                                    "png": card_face.image_uris.png,
+                                    "small": card_face.image_uris.small
                                 },
                                 "related_uris": {
                                     "gatherer": element.related_uris.gatherer
