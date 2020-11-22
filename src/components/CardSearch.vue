@@ -79,6 +79,7 @@ export default {
                                 "table_card_id": scope.$root.$data.getCardId(),
                                 "table_card_counter": {val: 0},
                                 "table_card_show_counter": false,
+                                "table_card_is_tapped": false,
                                 "drag_type": "card",
                                 "name": element.name,
                                 "oracle_text": card_face.oracle_text,

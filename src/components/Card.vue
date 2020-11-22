@@ -10,10 +10,11 @@
                 <template v-slot:default="{ hover }">
                     <div>
                     <v-card
-                        class="card_card"
+                        v-bind:class="[{ 'is_tapped': carddata.table_card_is_tapped }, 'card_card']"
                         v-bind="attrs"
                         v-on="on"
                         dark
+                        @click="doToggleTap"
                         @contextmenu="showContextMenu"
                     >
                         <div class="d-flex flex-no-wrap">
@@ -189,6 +190,10 @@ export default {
             this.carddata.table_card_show_counter = !this.carddata.table_card_show_counter
             this.$root.$data.sendGameData()
         },
+        doToggleTap() {
+            this.carddata.table_card_is_tapped = !this.carddata.table_card_is_tapped
+            this.$root.$data.sendGameData()
+        },
         showContextMenu(event) {
             event.preventDefault()
             this.showMenu = false
@@ -229,6 +234,10 @@ export default {
     line-height: 1rem;
     padding: 0;
     word-break: break-word;
+}
+
+.card_card.is_tapped {
+    transform: rotate(8deg);
 }
 
 .card_card .v-card__text {
