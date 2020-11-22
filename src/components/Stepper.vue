@@ -73,10 +73,15 @@ p.stepper-count {
     font-size: 1.3em;
     font-weight: bold;
     line-height: 50px;
+    width: 50px;
+    top: 0px;
+    position: absolute;
     z-index: 1;
 }
 
 .stepper-box {
+    position: relative;
+
     .changecount {
         position: absolute;
         width: 50px;

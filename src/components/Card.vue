@@ -21,11 +21,16 @@
                                 :src="carddata.image_uris.art_crop"
                                 width=100%
                                 max-width=350
-                                max-height=65
-                                min-height="65"
+                                max-height=72
+                                min-height=72
                             >
                                 <div>
                                     <ManaCost :cost="carddata.mana_cost"/>
+                                    <Stepper 
+                                        v-if="carddata.table_card_show_counter" 
+                                        :count="carddata.table_card_counter" 
+                                        icon="mdi-hexagon"
+                                    />
 
                                     <v-card-title>
                                         {{ carddata.name }} 
@@ -64,12 +69,28 @@
                             <v-list-item-group
                                 color="primary"
                             >
-                                <v-list-item @click="doClose">
-                                    <v-list-item-title>Delete Card</v-list-item-title>
-                                </v-list-item>
-
                                 <v-list-item v-if="duplicatefn != undefined" @click="doDuplicate">
                                     <v-list-item-title>Duplicate Card</v-list-item-title>
+                                </v-list-item>
+
+                                <v-list-item 
+                                    v-if="duplicatefn != undefined" 
+                                    @click="doToggleCounter"
+                                >
+                                    <v-list-item-title 
+                                        v-if="carddata.table_card_show_counter==false"
+                                    >
+                                        Show Counter
+                                    </v-list-item-title>
+                                    <v-list-item-title 
+                                        v-if="carddata.table_card_show_counter==true"
+                                    >
+                                        Hide Counter
+                                    </v-list-item-title>
+                                </v-list-item>
+
+                                <v-list-item @click="doClose">
+                                    <v-list-item-title>Discard</v-list-item-title>
                                 </v-list-item>
 
                                 <a :href="carddata.related_uris.gatherer" target="_new">
@@ -113,6 +134,7 @@
 </template>
 
 <script>
+import Stepper from './Stepper';
 import ManaCost from './ManaCost';
 
 export default {
@@ -123,6 +145,7 @@ export default {
     },
     components: {
         ManaCost,
+        Stepper,
     },
     data: () => ({
         closable: false,
@@ -161,6 +184,10 @@ export default {
             if (this.duplicatefn != undefined) {
                 this.duplicatefn(this.carddata)
             }
+        },
+        doToggleCounter() {
+            this.carddata.table_card_show_counter = !this.carddata.table_card_show_counter
+            this.$root.$data.sendGameData()
         },
         showContextMenu(event) {
             event.preventDefault()
@@ -220,6 +247,12 @@ export default {
 .card_card .mana_costs_container {
     margin: 5px 5px;
     float: right;
+}
+
+.card_card .stepper-box {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
 }
 
 .card_card .close-btn {
