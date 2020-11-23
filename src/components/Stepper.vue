@@ -13,7 +13,7 @@
         <p class="stepper-count">{{ count.val }}</p>
         <v-hover>
             <template v-slot:default="{ hover }">
-                <div class="changecount add" @click="updateCount(1)">
+                <div class="changecount add" @click.stop="updateCount(1)">
                     <v-fade-transition>
                         <v-overlay
                             v-if="hover"
@@ -29,7 +29,7 @@
 
         <v-hover>
             <template v-slot:default="{ hover }">
-                <div class="changecount subtract" @click="updateCount(-1)">
+                <div class="changecount subtract" @click.stop="updateCount(-1)">
                     <v-fade-transition>
                         <v-overlay
                             v-if="hover"
