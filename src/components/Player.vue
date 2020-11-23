@@ -46,41 +46,91 @@
                 dark
             >
 
-                <v-toolbar-title 
-                    v-if="!editingPlayerName"
-                    @click.self="doEditPlayerName"
+
+                <v-tooltip 
+                    bottom
+                    open-delay="300"
                 >
-                    {{ player.name }}
-                </v-toolbar-title>
-                <v-toolbar-title 
-                    v-if="editingPlayerName"
-                    class="toolbar-title-edit"
-                >
-                    <v-text-field
-                        class="edit-field"
-                        v-model="player.name"
-                        label="Press enter to save"
-                        placeholder="Player Name"
-                        outlined
-                        dense
-                        hide-details="true"
-                        @keydown.enter="endEditPlayerName"
-                        @blur="endEditPlayerName"
-                        ref="playerNameEditField"
-                    ></v-text-field>
-                </v-toolbar-title>
+                    <template v-slot:activator="{ on, attrs }">
+                        <div
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-toolbar-title
+                                v-bind="attrs"
+                                v-on="on"
+                                v-if="!editingPlayerName"
+                                @click.self="doEditPlayerName"
+                            >
+                                {{ player.name }}
+                            </v-toolbar-title>
+                            <v-toolbar-title 
+                                v-if="editingPlayerName"
+                                class="toolbar-title-edit"
+                            >
+                                <v-text-field
+                                    class="edit-field"
+                                    v-model="player.name"
+                                    label="Press enter to save"
+                                    placeholder="Player Name"
+                                    outlined
+                                    dense
+                                    hide-details="true"
+                                    @keydown.enter="endEditPlayerName"
+                                    @blur="endEditPlayerName"
+                                    ref="playerNameEditField"
+                                ></v-text-field>
+                            </v-toolbar-title>
+                        </div>
+                    </template>
+                    Click to edit player name
+                </v-tooltip>
 
                 <Stepper :count="player.health" icon="mdi-heart" iconoffset="2"/>
 
                 <v-spacer></v-spacer>
 
-                <v-btn
-                    v-if="hover"
-                    icon
-                    @click.stop="dialog = true"
-                >
-                    <v-icon>mdi-delete</v-icon>
-                </v-btn>
+                    <!--
+                        Untap All Button
+                    -->
+                    <v-tooltip 
+                        v-if="hover"
+                        bottom
+                        open-delay="300"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                icon
+                                @click.stop="doUntapAll"
+                            >
+                                <v-icon>mdi-undo-variant</v-icon>
+                            </v-btn>
+                        </template>
+                        Untap All
+                    </v-tooltip>
+
+                    <!--
+                        Delete Player Button
+                    -->
+                    <v-tooltip 
+                        v-if="hover"
+                        bottom
+                        open-delay="300"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                icon
+                                @click.stop="dialog = true"
+                            >
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </template>
+                        Delete Player
+                    </v-tooltip>
 
                 </v-toolbar>
                 </template>
@@ -169,6 +219,13 @@ export default {
         doDeletePlayer() {
             this.dialog = false
             this.$root.$data.deletePlayer(this.player)
+            this.$root.$data.sendGameData()
+        },
+        doUntapAll() {
+            for (let i = 0; i < this.player.cards.length; i++) {
+                const card = this.player.cards[i];
+                card.table_card_is_tapped = false;
+            }
             this.$root.$data.sendGameData()
         }
     }

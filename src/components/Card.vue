@@ -3,7 +3,7 @@
     <v-tooltip 
         right
         content-class="card_wrapper"
-        open-delay="900"
+        open-delay="1200"
     >
         <template v-slot:activator="{ on, attrs }">
             <v-hover>
