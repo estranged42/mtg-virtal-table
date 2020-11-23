@@ -112,6 +112,48 @@
                     </v-tooltip>
 
                     <!--
+                        Sort Cards Alphabetically
+                    -->
+                    <v-tooltip 
+                        v-if="hover"
+                        bottom
+                        open-delay="300"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                icon
+                                @click.stop="doSortCards('name')"
+                            >
+                                <v-icon>mdi-sort-alphabetical-descending-variant</v-icon>
+                            </v-btn>
+                        </template>
+                        Sort Cards Alphabetically
+                    </v-tooltip>
+
+                    <!--
+                        Sort Cards By Type
+                    -->
+                    <v-tooltip 
+                        v-if="hover"
+                        bottom
+                        open-delay="300"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                icon
+                                @click.stop="doSortCards('type')"
+                            >
+                                <v-icon>mdi-sort-bool-ascending</v-icon>
+                            </v-btn>
+                        </template>
+                        Sort Cards By Type
+                    </v-tooltip>
+
+                    <!--
                         Delete Player Button
                     -->
                     <v-tooltip 
@@ -227,6 +269,69 @@ export default {
                 card.table_card_is_tapped = false;
             }
             this.$root.$data.sendGameData()
+        },
+        doSortCards(sortBy) {
+            if (sortBy == "name") {
+                this.player.cards = this.player.cards.sort(this.cardCompareByName)
+            }
+            if (sortBy == "type") {
+                this.player.cards = this.player.cards.sort(this.cardCompareByType)
+            }
+            this.$root.$data.sendGameData()
+        },
+        cardCompareByName(card1, card2) {
+            let c1 = card1.name.toLowerCase()
+            let c2 = card2.name.toLowerCase()
+            if (c1 < c2) {
+                return -1
+            }
+            if (c1 > c2) {
+                return 1
+            }
+            return 0
+        },
+        cardCompareByType(card1, card2) {
+            let cardOrder = [
+                "legendary land",
+                "land",
+                "basic snow land",
+                "basic land",
+                "legendary planeswalker",
+                "legendary creature",
+                "artifact creature",
+                "creature",
+                "snow creature",
+                "legendary artifact",
+                "legendary enchantment artifact",
+                "artifact",
+                "enchantment",
+                "instant",
+                "sorcery",
+            ]
+            let c1 = card1.type_line.toLowerCase()
+            let c2 = card2.type_line.toLowerCase()
+            // Just get the first part of the type line, ie "Basic Snow Land — Plains"
+            if (c1.includes("—")) {
+                c1 = c1.split("—")[0].trim()
+            }
+            if (c2.includes("—")) {
+                c2 = c2.split("—")[0].trim()
+            }
+            if (c1.includes("//")) {
+                c1 = c1.split("//")[0].trim()
+            }
+            if (c2.includes("//")) {
+                c2 = c2.split("//")[0].trim()
+            }
+            let idx1 = cardOrder.indexOf(c1)
+            let idx2 = cardOrder.indexOf(c2)
+            if (idx1 < idx2) {
+                return -1
+            }
+            if (idx1 > idx2) {
+                return 1
+            }
+            return 0
         }
     }
 }
