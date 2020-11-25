@@ -259,7 +259,8 @@
           <h3>Changelog</h3>
           <ul>
             <li>2020-11-24: Added 'Create Token' item to the Card context menu. Note that only newer cards seem to provide
-                the data required to make this work, so not all cards that create tokens will display this item.</li>
+                the data required to make this work, so not all cards that create tokens will display this item. Try the 
+                'Hive Stirring' card for an example that works.</li>
             <li>2020-11-23: Added card sorting buttons to the Player toolbar.</li>
             <li>2020-11-22: Added tap/untap rotation to cards by clicking on them.</li>
             <li>2020-11-22: Added a toggleable counter to all cards.</li>
