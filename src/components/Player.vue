@@ -188,7 +188,12 @@
             >
                 <template v-slot:item="{item}">
                     <drag class="item" :key="item.table_card_id" :data="item" @cut="remove(item)" :disabled="$vuetify.breakpoint.mobile">
-                        <Card v-if="item.drag_type=='card'" v-bind:carddata="item" :closefn="remove" :duplicatefn="onDuplicate"/>
+                        <Card 
+                            v-if="item.drag_type=='card'" 
+                            v-bind:carddata="item" 
+                            :closefn="remove" 
+                            :duplicatefn="onDuplicate"
+                        />
                         <Counter v-if="item.drag_type=='counter'" :counterdata="item" :closefn="remove"/>
                     </drag>
                 </template>

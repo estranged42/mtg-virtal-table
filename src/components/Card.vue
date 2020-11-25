@@ -66,14 +66,20 @@
                         v-if="closable"
                         
                     >
+                        <!-- 
+                            Context Menu Popup
+                        -->
                         <v-list nav dense class="card-context-menu">
+
                             <v-list-item-group
                                 color="primary"
                             >
+                                <!-- Duplicate Card -->
                                 <v-list-item v-if="duplicatefn != undefined" @click="doDuplicate">
                                     <v-list-item-title>Duplicate Card</v-list-item-title>
                                 </v-list-item>
 
+                                <!-- Toggle Counter -->
                                 <v-list-item 
                                     v-if="duplicatefn != undefined" 
                                     @click="doToggleCounter"
@@ -90,10 +96,17 @@
                                     </v-list-item-title>
                                 </v-list-item>
 
+                                <!-- Create Tokens -->
+                                <v-list-item v-for="token in carddata.tokens" :key="token.id" @click="doCreateToken(token)">
+                                    <v-list-item-title>Create '{{ token.name }}' Token</v-list-item-title>
+                                </v-list-item>
+
+                                <!-- Discard Card -->
                                 <v-list-item @click="doClose">
                                     <v-list-item-title>Discard</v-list-item-title>
                                 </v-list-item>
 
+                                <!-- View on Gatherer -->
                                 <a :href="carddata.related_uris.gatherer" target="_new">
                                 <v-list-item>
                                     <v-list-item-title>View at Gatherer</v-list-item-title>
@@ -135,6 +148,7 @@
 </template>
 
 <script>
+const axios = require('axios').default;
 import Stepper from './Stepper';
 import ManaCost from './ManaCost';
 
@@ -203,6 +217,41 @@ export default {
                 this.showMenu = true
             })
         },
+        doCreateToken(token) {
+            let call_url = token.url
+            axios
+                .get(call_url)
+                .then(response => {
+                    let data = response.data
+                    if (data.object == 'card') {
+                        let new_card = this.$root.$data.generateCardFromJSON(data)
+                        if (this.duplicatefn != undefined) {
+                            this.duplicatefn(new_card)
+                        }
+                    }
+                    this.loading = false
+                })
+                .catch(err => {
+                    this.loading = false
+                    if (err.response) {
+                    console.log("response error")
+                    console.log(err.response)
+                    if (err.response.status == 404) {
+                        this.setError("The requested token was not found. It likely expired.")
+                    } else if (err.response.status == 403) {
+                        this.setError("The requested token has expired.")
+                    } else {
+                        console.log(err)
+                        this.setError("Something went wrong.")
+                    }
+                    } else if (err.request) {
+                    console.log("request error")
+                    console.log(err.request)
+                    } else {
+                    console.log(err)
+                    }
+                })
+        }
     }
 }
 </script>
