@@ -13,6 +13,15 @@
     >
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title>MTG: Virtual Table</v-toolbar-title>
+      <v-spacer/>
+      <v-btn
+        icon
+        v-bind="attrs"
+        v-on="on"
+        @click="infopanel=!infopanel"
+      >
+        <v-icon>mdi-information</v-icon>
+      </v-btn>
 
     </v-app-bar>
 
@@ -35,22 +44,14 @@
               </v-list-item-subtitle>
             </v-list-item-content>
 
-            <v-tooltip 
-                right
-                v-if="$root.$data.connected"
+            <v-btn
+              icon
+              v-bind="attrs"
+              v-on="on"
+              @click="infopanel=!infopanel"
             >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="settings=!settings"
-                >
-                  <v-icon>mdi-account-multiple-check</v-icon>
-                </v-btn>
-              </template>
-              <span>Connected to Game Table {{ $root.$data.state.gameid }}</span>
-            </v-tooltip>
+              <v-icon>mdi-information</v-icon>
+            </v-btn>
 
           </div>
         </v-list-item>
@@ -178,6 +179,105 @@
       </v-card>
     </v-dialog>
 
+
+    <v-dialog
+      v-model="infopanel"
+      min-width="300"
+      max-width="800"
+      max-height="800"
+    >
+      <v-card
+        class="overflow-hidden"
+      >
+
+        <v-app-bar
+            absolute
+            elevate-on-scroll
+            color="indigo"
+            scroll-target="#infopanelscrollbody"
+            dark
+          >
+            <v-toolbar-title>
+              MTG: Virtual Table - Info
+            </v-toolbar-title>
+            <v-spacer/>
+            <v-btn
+              icon
+              v-bind="attrs"
+              v-on="on"
+              @click="infopanel=!infopanel"
+            >
+              <v-icon>mdi-close-circle</v-icon>
+            </v-btn>
+        </v-app-bar>
+
+        <v-sheet
+          id="infopanelscrollbody"
+          class="overflow-y-auto"
+          max-height="800"
+        >
+          <v-card-text>
+          <p>
+            MTG: Virtual Table lets you share a game table with other people so you can all participate in a virtual 
+            Magic The Gathering game. One person hosts a game in Settings. Share the resulting table code with your 
+            friends, and they'll be connected to the same table. No accounts or sign-ups required.
+          </p>
+
+          <h3>Basics</h3>
+          <p>
+            Start by setting up the number of players you're going to have. You can add players with the "Add Player"
+            button in the left sidebar. You can rename players by clicking on the name. If you mouse over the player
+            bar you can see the other toolbar buttons. Delete a player by clicking on the trashcan icon.
+          </p>
+
+          <p>
+            Search for cards by entering text in the "Search for Cards" field in the left sidebar. Once the cards are
+            returned, drag the card you want over to one of the players. You can re-order cards by dragging them around
+            within a player, or drag them from one player to another. In the player toolbar there are two sorting buttons
+            to sort alphabetically, or by card type.
+          </p>
+
+          <p>
+            If you hover over a card, a detail view with a full image of the card will appear. While hovering over a 
+            card, a close icon will appear in the upper right of the card. Clicking on this will discard the card from
+            the player. You can also click on a card to 'tap' and 'untap' it.
+          </p>
+          <p>
+            There's also a context menu for each card that can be accessed by right-clicking on the card.
+            In the context menu you will find the following:
+          <ul>
+            <li>Duplicate Card - Makes a copy of this card and adds it to the player.</li>
+            <li>Show Counter - Shows a configurable counter on the right side of the card.</li>
+            <li>Discard - Discard this card from the player. Same as clicking the close icon.</li>
+            <li>Create 'X' Token - If the card support creating tokens of various sorts, they will appear here. Not all 
+                cards that create tokens are supported in this way by the underlying Scryfall API. Newer cards seem to
+                be well supported, while older ones are not.</li>
+            <li>View on Gatherer - Open a new tab to the gatherer.wizards.com entry for that card.</li>
+          </ul>
+          </p>
+
+          <h3>Changelog</h3>
+          <ul>
+            <li>2020-11-24: Added 'Create Token' item to the Card context menu. Note that only newer cards seem to provide
+                the data required to make this work, so not all cards that create tokens will display this item.</li>
+            <li>2020-11-23: Added card sorting buttons to the Player toolbar.</li>
+            <li>2020-11-22: Added tap/untap rotation to cards by clicking on them.</li>
+            <li>2020-11-22: Added a toggleable counter to all cards.</li>
+            <li>2020-11-15: Fixed bug with dual-faced cards. Not fully supported yet, will only display the front face.</li>
+            <li>2020-11-14: Replaced the {W} placeholder text in card descriptions with icons.</li>
+            <li>2020-11-04: Added multi-player support.</li>
+            <li>2020-10-29: Better support for mobile browsers.</li>
+            <li>2020-10-27: Added background images to the table.</li>
+            <li>2020-10-27: Added player health stepper.</li>
+            <li>2020-10-27: Dragging cards to players.</li>
+            <li>2020-10-27: Card seraching basics.</li>
+          </ul>
+          </v-card-text>
+        </v-sheet>
+
+      </v-card>
+    </v-dialog>
+
   </v-app>
 </template>
 
@@ -200,6 +300,7 @@ export default {
 
   data: () => ({
     settings: false,
+    infopanel: false,
     connection: null,
     connected: false,
     drawer: true,
@@ -345,6 +446,10 @@ div.mtgvirtualtable {
 
 .settings-panels .v-expansion-panel-content {
   padding-top: 15px;
+}
+
+#infopanelscrollbody .v-card__text {
+  margin-top: 70px;
 }
 
 </style>
