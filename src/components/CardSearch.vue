@@ -69,35 +69,7 @@ export default {
                     if (data.total_cards > 0) {
                         let cards = data.data
                         cards.forEach(element => (function(scope){
-                            // console.log(element)
-                            // Figure out how to handle dual-face cards
-                            let card_face = element
-                            if (element.card_faces != undefined) {
-                                card_face = element.card_faces[0]
-                            }
-                            let new_card = {
-                                "table_card_id": scope.$root.$data.getCardId(),
-                                "table_card_counter": {val: 0},
-                                "table_card_show_counter": false,
-                                "table_card_is_tapped": false,
-                                "drag_type": "card",
-                                "name": element.name,
-                                "oracle_text": card_face.oracle_text,
-                                "flavor_text": card_face.flavor_text,
-                                "mana_cost": card_face.mana_cost,
-                                "type_line": element.type_line,
-                                "color_identity": element.color_identity,
-                                "power": element.power,
-                                "toughness": element.toughness,
-                                "image_uris": {
-                                    "art_crop": card_face.image_uris.art_crop,
-                                    "png": card_face.image_uris.png,
-                                    "small": card_face.image_uris.small
-                                },
-                                "related_uris": {
-                                    "gatherer": element.related_uris.gatherer
-                                }
-                            }
+                            let new_card = scope.$root.$data.generateCardFromJSON(element)
                             scope.items = scope.items.concat(new_card)
                         })(this));
                     }

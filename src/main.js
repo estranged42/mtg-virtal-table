@@ -103,6 +103,52 @@ var gamedata = {
   },
   sendGameData() {
     this.sendWebSocketMessage("sendstate", this.state)
+  },
+  generateCardFromJSON(card_json) {
+    // console.log(card_json)
+    // Figure out how to handle dual-face cards
+    let card_face = card_json
+    if (card_json.card_faces != undefined) {
+        card_face = card_json.card_faces[0]
+    }
+    let new_card = {
+        "table_card_id": this.getCardId(),
+        "table_card_counter": {val: 0},
+        "table_card_show_counter": false,
+        "table_card_is_tapped": false,
+        "drag_type": "card",
+        "name": card_json.name,
+        "oracle_text": card_face.oracle_text,
+        "flavor_text": card_face.flavor_text,
+        "mana_cost": card_face.mana_cost,
+        "type_line": card_json.type_line,
+        "color_identity": card_json.color_identity,
+        "power": card_json.power,
+        "toughness": card_json.toughness,
+        "image_uris": {
+            "art_crop": card_face.image_uris.art_crop,
+            "png": card_face.image_uris.png,
+            "small": card_face.image_uris.small
+        },
+        "related_uris": {
+            "gatherer": card_json.related_uris.gatherer
+        }
+    }
+    let tokens = []
+    if (card_json.all_parts && card_json.set_type && card_json.set_type != 'token') {
+      for (let i = 0; i < card_json.all_parts.length; i++) {
+        const element = card_json.all_parts[i];
+        if (element.component && element.component == 'token') {
+          tokens.push({
+              "name": element.name,
+              "url": element.uri,
+              "id": element.id
+          })
+        }
+      }
+    }
+    new_card.tokens = tokens
+    return new_card
   }
 }
 
