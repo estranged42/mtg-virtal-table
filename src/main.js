@@ -16,8 +16,8 @@ var gamedata = {
     nextPlayerId: 3,
     nextCardId: 100,
     players: [
-        {id: 1, name: "Player One", health: {val: 20}, cards: []},
-        {id: 2, name: "Player Two", health: {val: 20}, cards: []},
+        {id: 1, name: "Player One", health: {val: 20}, cards: [], is_active_player: true, is_monarch: false},
+        {id: 2, name: "Player Two", health: {val: 20}, cards: [], is_active_player: false, is_monarch: false},
     ],
   },
   setGameID(newValue) {
@@ -31,7 +31,14 @@ var gamedata = {
     return id
   },
   addPlayer() {
-    let p = {id: this.state.nextPlayerId, name: "New Player", health: {val: 20}, cards: []}
+    let p = {
+      id: this.state.nextPlayerId, 
+      name: "New Player", 
+      health: {val: 20}, 
+      cards: [],
+      is_active_player: false,
+      is_monarch: false
+    }
     this.state.players = this.state.players.concat(p)
     this.state.nextPlayerId = this.state.nextPlayerId + 1
     if (this.debug) console.log(`Adding player ${p.id}: ${p.name}`)

@@ -88,6 +88,56 @@
 
                 <Stepper :count="player.health" icon="mdi-heart" iconoffset="2"/>
 
+                    <!--
+                        Active Player Button / Icon
+                    -->
+                    <v-tooltip 
+                        v-show="hover || player.is_active_player"
+                        bottom
+                        open-delay="300"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                v-show="hover || player.is_active_player"
+                                v-bind="attrs"
+                                v-on="on"
+                                icon
+                                small
+                                @click.stop="setactiveplayerfn(player)"
+                            >
+                                <v-icon v-if="player.is_active_player">mdi-account-check</v-icon>
+                                <v-icon v-if="!player.is_active_player">mdi-account-outline</v-icon>
+                            </v-btn>
+                        </template>
+                        <span v-if="player.is_active_player">It's this person's turn</span>
+                        <span v-if="!player.is_active_player">Set as this player's turn</span>
+                    </v-tooltip>
+
+                    <!--
+                        Monarch Button / Icon
+                    -->
+                    <v-tooltip 
+                        v-show="hover || player.is_monarch"
+                        bottom
+                        open-delay="300"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                v-show="hover || player.is_monarch"
+                                v-bind="attrs"
+                                v-on="on"
+                                icon
+                                small
+                                @click.stop="setmonarchfn(player)"
+                            >
+                                <v-icon v-if="player.is_monarch">mdi-crown</v-icon>
+                                <v-icon v-if="!player.is_monarch">mdi-crown-outline</v-icon>
+                            </v-btn>
+                        </template>
+                        <span v-if="player.is_monarch">This player is the Monarch</span>
+                        <span v-if="!player.is_monarch">Claim the Monarchy</span>
+                    </v-tooltip>
+
                 <v-spacer></v-spacer>
 
                     <!--
@@ -103,6 +153,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 icon
+                                small
                                 @click.stop="doUntapAll"
                             >
                                 <v-icon>mdi-undo-variant</v-icon>
@@ -124,6 +175,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 icon
+                                small
                                 @click.stop="doSortCards('name')"
                             >
                                 <v-icon>mdi-sort-alphabetical-descending-variant</v-icon>
@@ -145,6 +197,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 icon
+                                small
                                 @click.stop="doSortCards('type')"
                             >
                                 <v-icon>mdi-sort-bool-ascending</v-icon>
@@ -166,6 +219,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 icon
+                                small
                                 @click.stop="dialog = true"
                             >
                                 <v-icon>mdi-delete</v-icon>
@@ -219,7 +273,11 @@ import Counter from './Counter';
 import Stepper from './Stepper';
 
 export default {
-    props: ['player'],
+    props: [
+        'player',
+        'setactiveplayerfn',
+        'setmonarchfn'
+    ],
     components: {
         Card,
         Counter,
