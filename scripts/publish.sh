@@ -4,6 +4,10 @@ ENVIRONMENT=$1
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 source $SCRIPTPATH/env.sh
 
+# Do a fresh build
+yarn build
+
+
 DISTRIBUTION_FOLDER=$SCRIPTPATH/../dist
 
 if [ -d "$DISTRIBUTION_FOLDER" ]; then
