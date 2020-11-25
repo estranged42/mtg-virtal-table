@@ -149,6 +149,16 @@ var gamedata = {
     }
     new_card.tokens = tokens
     return new_card
+  },
+  getCounterBackgroundImage() {
+    let backgroundImages = [
+      "images/token-yellow.jpg",
+      "images/token-red.jpg",
+      "images/token-blue.jpg",
+      "images/token-green.jpg",
+    ]
+    let r = Math.floor(Math.random() * backgroundImages.length)
+    return backgroundImages[r]
   }
 }
 

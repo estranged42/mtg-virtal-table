@@ -2,14 +2,24 @@
     <v-hover>
         <template v-slot:default="{ hover }">
             <v-card
-                class="counter"
+                v-bind:class="[{ 'is_tapped': counterdata.table_card_is_tapped }, 'counter']"
+                height=72
+                dark
+                @click="doToggleTap"
             >
                 <div class="d-flex flex-no-wrap">
+                    <v-img 
+                        :src="counterdata.background_image"
+                        width=100%
+                        :max-width=maxwidth
+                        max-height=72
+                        min-height=72
+                    >
                         <Stepper :count="counterdata.count" icon="mdi-hexagon"/>
                         <v-card-title
                             v-text="counterdata.name"
                             v-if="!editingCounterName"
-                            @click="doEditCounterName"
+                            @click.stop="doEditCounterName"
                         ></v-card-title>
                         <v-card-title 
                             v-if="editingCounterName"
@@ -39,6 +49,7 @@
                         >
                             <v-icon>mdi-close-circle</v-icon>
                         </v-btn>
+                    </v-img>
                 </div>
             </v-card>
         </template>
@@ -53,10 +64,15 @@ export default {
     components: {
         Stepper,
     },
-    props: ['counterdata', 'closefn'],
+    props: ['counterdata', 'closefn', 'maxwidth'],
     data: () => ({
-        editingCounterName: false,
+        editingCounterName: false
     }),
+    created() {
+        if (this.maxwidth == undefined) {
+            this.maxwidth = 350
+        }
+    },
     methods: {
         doEditCounterName() {
             this.editingCounterName = true
@@ -67,6 +83,10 @@ export default {
         },
         endEditCounterName() {
             this.editingCounterName = false
+            this.$root.$data.sendGameData()
+        },
+        doToggleTap() {
+            this.counterdata.table_card_is_tapped = !this.counterdata.table_card_is_tapped
             this.$root.$data.sendGameData()
         },
         doClose() {
@@ -83,11 +103,13 @@ export default {
 .counter {
     margin: 2px;
     position: relative;
+    text-shadow: 0 0 0.4em black;
 }
 
 .counter .v-card__title {
     padding: 0px 5px;
     font-size: 1rem;
+    word-break: break-word;
 }
 
 .counter .close-btn {
@@ -96,4 +118,20 @@ export default {
     right: 0px;
     margin: 2px;
 }
+
+.counter .stepper-box {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+
+.counter .v-image__image {
+  filter: brightness(80%) contrast(80%) blur(1px);;
+}
+
+.counter.is_tapped {
+    transform: rotate(8deg);
+}
+
+
 </style>

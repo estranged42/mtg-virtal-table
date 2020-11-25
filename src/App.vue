@@ -92,7 +92,7 @@
           >
             <v-list-item-content>
                 <drag :data="counterData" @dragstart="onDragStart" @cut="onCut">
-                    <Counter :counterdata="counterData"/>
+                    <Counter :counterdata="counterData" :maxwidth="240"/>
                 </drag>
             </v-list-item-content>
           </v-list-item>
@@ -349,8 +349,11 @@ export default {
     counterData: {
       drag_type: "counter", 
       name: "New Counter", 
+      background_image: "images/token-yellow.jpg",
       count: {val: 1}, 
-      table_card_id: 0
+      table_card_is_tapped: false,
+      table_card_id: 0,
+      type_line: 'table_card_counter'
     },
   }),
   mounted() {

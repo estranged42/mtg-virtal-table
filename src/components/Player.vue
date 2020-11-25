@@ -234,6 +234,10 @@ export default {
     methods: {
         onInsert(event) {
             let dataCopy = JSON.parse(JSON.stringify(event.data));
+            // If this is a counter, pick a new random background color
+            if (dataCopy.drag_type == 'counter') {
+                dataCopy.background_image = this.$root.$data.getCounterBackgroundImage()
+            }
             this.player.cards.splice(event.index, 0, dataCopy);
             this.$root.$data.sendGameData()
         },
@@ -280,7 +284,8 @@ export default {
                 this.player.cards = this.player.cards.sort(this.cardCompareByName)
             }
             if (sortBy == "type") {
-                this.player.cards = this.player.cards.sort(this.cardCompareByType)
+                let sortedCards = this.player.cards.sort(this.cardCompareByName)
+                this.player.cards = sortedCards.sort(this.cardCompareByType)
             }
             this.$root.$data.sendGameData()
         },
@@ -312,6 +317,7 @@ export default {
                 "enchantment",
                 "instant",
                 "sorcery",
+                "table_card_counter",
             ]
             let c1 = card1.type_line.toLowerCase()
             let c2 = card2.type_line.toLowerCase()
