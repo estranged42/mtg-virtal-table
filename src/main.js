@@ -9,6 +9,9 @@ let _gamedata = undefined
 
 var gamedata = {
   debug: process.env.NODE_ENV == "development",
+  showalertbar: false,
+  alertmessage: "",
+  gambetableurl: "",
   connection: null,
   connected: false,
   state: {
@@ -19,6 +22,10 @@ var gamedata = {
         {id: 1, name: "Player One", health: {val: 20}, cards: [], is_active_player: true, is_monarch: false},
         {id: 2, name: "Player Two", health: {val: 20}, cards: [], is_active_player: false, is_monarch: false},
     ],
+  },
+  alert(message) {
+    this.alertmessage = message,
+    this.showalertbar = true
   },
   setGameID(newValue) {
     if (this.debug) console.log('setGameID triggered with', newValue)
@@ -55,6 +62,7 @@ var gamedata = {
       if (this.debug) console.log("Starting connection to WebSocket Server")
       this.connection = new WebSocket("wss://5mz965txnl.execute-api.us-west-2.amazonaws.com/dev")
 
+      // store a reference to this gamedata object globally
       _gamedata = this
       this.connection.onmessage = this.handleIncomingMessage
 
@@ -65,6 +73,7 @@ var gamedata = {
     }
   },
   handleIncomingMessage(event) {
+    if (_gamedata.debug) console.log("incoming event: " + event.data)
     if (event.data != undefined) {
       let event_data = JSON.parse(event.data)
       let action = event_data.action
@@ -75,10 +84,11 @@ var gamedata = {
         _gamedata.sendGameData()
         // Copy a game URL to the clipboard
         let document_url = new URL(document.location.href)
-        let game_url = `${document_url.origin}/${_gamedata.state.gameid}`
-        navigator.clipboard.writeText(game_url).then(function() {
+        _gamedata.gambetableurl = `${document_url.origin}/${_gamedata.state.gameid}`
+        navigator.clipboard.writeText(_gamedata.gambetableurl).then(function() {
           /* clipboard successfully set */
-          if (_gamedata.debug) console.log(game_url)
+          if (_gamedata.debug) console.log(_gamedata.gambetableurl)
+          _gamedata.alert(`Coppied Game Table URL to clipboard: ${_gamedata.gambetableurl}`)
         }, function() {
           /* clipboard write failed */
           if (_gamedata.debug) console.log("text not coppied!")
@@ -86,7 +96,7 @@ var gamedata = {
       } else if (action == "join") {
         _gamedata.state = event_data.gamedata
         if (_gamedata.debug) console.log("joined game: " + _gamedata.state.gameid)
-
+        _gamedata.alert(`Joine Game Table: ${_gamedata.state.gameid}`)
       } else if (action == "sendstate") {
         if (_gamedata.debug) console.log("confirm new state sent")
 

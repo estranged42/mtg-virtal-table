@@ -175,6 +175,13 @@
       </v-card>
     </v-dialog>
 
+    <v-snackbar
+      v-model="$root.$data.showalertbar"
+      timeout="3000"
+      top
+    >
+      {{ $root.$data.alertmessage }}
+    </v-snackbar>
 
     <v-dialog
       v-model="infopanel"
