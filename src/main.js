@@ -73,10 +73,13 @@ var gamedata = {
     }
   },
   handleIncomingMessage(event) {
-    if (_gamedata.debug) console.log("incoming event: " + event.data)
     if (event.data != undefined) {
       let event_data = JSON.parse(event.data)
       let action = event_data.action
+      if (event_data.error) {
+        if (_gamedata.debug) console.log(event_data.error)
+        _gamedata.alert(event_data.error)
+      }
       if (action == "host") {
         if (_gamedata.debug) console.log("new game id: " + event_data.gameid)
         _gamedata.state.gameid = event_data.gameid

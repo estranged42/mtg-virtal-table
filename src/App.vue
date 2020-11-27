@@ -177,7 +177,7 @@
 
     <v-snackbar
       v-model="$root.$data.showalertbar"
-      timeout="3000"
+      timeout="4000"
       top
     >
       {{ $root.$data.alertmessage }}
@@ -389,6 +389,8 @@ export default {
           this.$root.$data.state.gameid = table_id
           this.doJoinGame()
         })
+      } else {
+        this.$root.$data.alert("Invalid Game Table ID found in URL")
       }
     }
 
