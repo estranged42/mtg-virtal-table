@@ -73,7 +73,16 @@ var gamedata = {
         _gamedata.state.gameid = event_data.gameid
         // Be sure to send over the game data after receiving host confirmation
         _gamedata.sendGameData()
-
+        // Copy a game URL to the clipboard
+        let document_url = new URL(document.location.href)
+        let game_url = `${document_url.origin}/${_gamedata.state.gameid}`
+        navigator.clipboard.writeText(game_url).then(function() {
+          /* clipboard successfully set */
+          if (_gamedata.debug) console.log(game_url)
+        }, function() {
+          /* clipboard write failed */
+          if (_gamedata.debug) console.log("text not coppied!")
+        });
       } else if (action == "join") {
         _gamedata.state = event_data.gamedata
         if (_gamedata.debug) console.log("joined game: " + _gamedata.state.gameid)
