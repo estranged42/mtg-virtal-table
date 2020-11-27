@@ -299,7 +299,11 @@ def handler(event, context):
 
             game = get_game(gameid)
             if game is None:
-                return _format_response(f'Invalid gameid', 400)
+                resp = {
+                    "error": f'Could not join table {gameid}. Table does not exist, or has expired.'
+                }
+                send_socket_message(resp, connection_id, domain_name)
+                return _format_response(f'Invalid gameid {gameid}', 400)
 
             game = add_player_to_game(gameid, connection_id)
             numplayers = len(game['players'])
@@ -325,7 +329,11 @@ def handler(event, context):
 
             game = get_game(gameid)
             if game is None:
-                return _format_response(f'Invalid gameid', 400)
+                resp = {
+                    "error": f'Could not join table {gameid}. Table does not exist, or has expired.'
+                }
+                send_socket_message(resp, connection_id, domain_name)
+                return _format_response(f'Invalid gameid {gameid}', 400)
             
             game['gamedata'] = new_game_data
             numplayers = len(game['players'])
