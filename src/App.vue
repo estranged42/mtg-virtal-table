@@ -368,6 +368,23 @@ export default {
     ctx.putImageData(imageData, 0, 0);
     this.background.lazysrc = canvas.toDataURL('image/png')
 
+    // See if there's a Game Table ID in the URL to join
+    let u = new URL(document.location.href)
+    let path = u.pathname
+    // path will just be '/' if there's no table id
+    if (path.length > 1) {
+      // path should be something like /XP1W so the split will result in ["", "XP1W"]
+      let table_id = path.split('/')[1]
+      const regex = /^[0-9A-Z]+$/;
+      if (regex.test(table_id)) {
+        this.$nextTick(() => {
+          if (this.$root.$data.debug) console.log('Found Game Table ID in URL:', table_id)
+          this.$root.$data.state.gameid = table_id
+          this.doJoinGame()
+        })
+      }
+    }
+
   },
   methods: {
     addPlayer() {
