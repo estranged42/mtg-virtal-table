@@ -66,11 +66,12 @@ export default {
     },
     props: ['counterdata', 'closefn', 'maxwidth'],
     data: () => ({
-        editingCounterName: false
+        editingCounterName: false,
+        imageMaxWidth: 350
     }),
     created() {
-        if (this.maxwidth == undefined) {
-            this.maxwidth = 350
+        if (this.maxwidth != undefined) {
+            this. imageMaxWidth = this.maxwidth
         }
     },
     methods: {
