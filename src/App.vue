@@ -16,8 +16,6 @@
       <v-spacer/>
       <v-btn
         icon
-        v-bind="attrs"
-        v-on="on"
         @click="infopanel=!infopanel"
       >
         <v-icon>mdi-information</v-icon>
@@ -46,8 +44,6 @@
 
             <v-btn
               icon
-              v-bind="attrs"
-              v-on="on"
               @click="infopanel=!infopanel"
             >
               <v-icon>mdi-information</v-icon>
@@ -203,8 +199,6 @@
             <v-spacer/>
             <v-btn
               icon
-              v-bind="attrs"
-              v-on="on"
               @click="infopanel=!infopanel"
             >
               <v-icon>mdi-close-circle</v-icon>
