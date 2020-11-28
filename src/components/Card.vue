@@ -52,6 +52,17 @@
                                 >
                                     <v-icon>mdi-close-circle</v-icon>
                                 </v-btn>
+
+                                <v-btn
+                                    v-show="closefn && hover && $vuetify.breakpoint.mobile"
+                                    icon
+                                    x-small
+                                    color="grey"
+                                    class="close-btn"
+                                    @click.stop="showContextMenu"
+                                >
+                                    <v-icon>mdi-menu</v-icon>
+                                </v-btn>
                             </v-img>
                         </div>
                     </v-card>
