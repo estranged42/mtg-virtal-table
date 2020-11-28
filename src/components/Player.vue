@@ -302,7 +302,7 @@ export default {
         onDuplicate(card) {
             let dataCopy = JSON.parse(JSON.stringify(card));
             dataCopy.table_card_id = this.$root.$data.getCardId()
-            this.player.cards.splice(event.index, 0, dataCopy);
+            this.player.cards.splice(this.player.cards.length, 0, dataCopy);
             this.$root.$data.sendGameData()
         },
         onReorder(event) {
