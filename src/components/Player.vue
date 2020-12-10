@@ -393,6 +393,7 @@ export default {
             this.cardFromGraveyard(card)
             this.cardToPlayer(cardCopy)
             this.showGraveyard = false
+            this.$root.$data.sendGameData()
         },
         duplicateCard(card) {
             let cardCopy = JSON.parse(JSON.stringify(card));
