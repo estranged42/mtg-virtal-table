@@ -19,8 +19,8 @@ var gamedata = {
     nextPlayerId: 3,
     nextCardId: 100,
     players: [
-        {id: 1, name: "Player One", health: {val: 20}, cards: [], is_active_player: true, is_monarch: false},
-        {id: 2, name: "Player Two", health: {val: 20}, cards: [], is_active_player: false, is_monarch: false},
+        {id: 1, name: "Player One", health: {val: 20}, cards: [], graveyard: [], is_active_player: true, is_monarch: false},
+        {id: 2, name: "Player Two", health: {val: 20}, cards: [], graveyard: [], is_active_player: false, is_monarch: false},
     ],
   },
   alert(message) {
@@ -43,6 +43,7 @@ var gamedata = {
       name: "New Player", 
       health: {val: 20}, 
       cards: [],
+      graveyard: [],
       is_active_player: false,
       is_monarch: false
     }

@@ -163,6 +163,29 @@
                     </v-tooltip>
 
                     <!--
+                        Toggle Graveyard Button
+                    -->
+                    <v-tooltip 
+                        v-if="hover"
+                        bottom
+                        open-delay="300"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                :disabled="player.graveyard.length == 0"
+                                icon
+                                small
+                                @click.stop="showGraveyard = !showGraveyard"
+                            >
+                                <v-icon>mdi-grave-stone</v-icon>
+                            </v-btn>
+                        </template>
+                        Show Graveyard / Exiled
+                    </v-tooltip>
+
+                    <!--
                         Sort Cards Alphabetically
                     -->
                     <v-tooltip 
@@ -261,6 +284,53 @@
                     <div class="reordering-feedback" key="feedback"/>
                 </template>
             </drop-list>
+
+            <!-- 
+                Graveyard Overlay
+            -->
+
+            <v-overlay
+                :absolute="false"
+                :opacity="0.8"
+                :value="showGraveyard"
+                class="player-graveyard-container"
+                >
+
+                <v-card
+                    class="player-graveyard"
+                >
+                    <v-toolbar
+                        color="indigo"
+                        class="player-toolbar"
+                        dark
+                    >
+                        <v-toolbar-title>
+                            {{ player.name }}'s Graveyard
+                        </v-toolbar-title>
+
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            icon
+                            small
+                            @click.stop="showGraveyard = false"
+                        >
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </v-toolbar>
+
+                    <div class="graveyard_card_list">
+                        <Card 
+                            v-for="card in player.graveyard"
+                            :key="card.table_card_id"
+                            v-bind:carddata="card" 
+                            :closefn="remove" 
+                            :duplicatefn="onDuplicate"
+                            :returntoplayfn="onReturnToPlay"
+                        />
+                    </div>
+                </v-card>
+                
+            </v-overlay>
         </v-card>
         
     </span>
@@ -288,31 +358,66 @@ export default {
     data: () => ({
         editingPlayerName: false,
         dialog: false,
+        showGraveyard: false,
     }),
     methods: {
         onInsert(event) {
-            let dataCopy = JSON.parse(JSON.stringify(event.data));
+            let card = this.duplicateCard(event.data)
             // If this is a counter, pick a new random background color
-            if (dataCopy.drag_type == 'counter') {
-                dataCopy.background_image = this.$root.$data.getCounterBackgroundImage()
+            if (card.drag_type == 'counter') {
+                card.background_image = this.$root.$data.getCounterBackgroundImage()
             }
-            this.player.cards.splice(event.index, 0, dataCopy);
+            this.cardToPlayer(card, event.index)
             this.$root.$data.sendGameData()
         },
         onDuplicate(card) {
-            let dataCopy = JSON.parse(JSON.stringify(card));
-            dataCopy.table_card_id = this.$root.$data.getCardId()
-            this.player.cards.splice(this.player.cards.length, 0, dataCopy);
+            let cardCopy = this.duplicateCard(card)
+            this.cardToPlayer(cardCopy)
             this.$root.$data.sendGameData()
         },
         onReorder(event) {
             event.apply(this.player.cards)
             this.$root.$data.sendGameData()
         },
-        remove(value) {
-            let index = this.player.cards.indexOf(value);
-            this.player.cards.splice(index, 1);
+        remove(card) {
+            // put a duplicate of the card into the graveyard
+            let cardCopy = this.duplicateCard(card)
+            cardCopy.inGraveyard = true
+            this.cardToGraveyard(cardCopy)
+            // delete the card from the player
+            this.cardFromPlayer(card)
             this.$root.$data.sendGameData()
+        },
+        onReturnToPlay(card) {
+            let cardCopy = this.duplicateCard(card)
+            this.cardFromGraveyard(card)
+            this.cardToPlayer(cardCopy)
+            this.showGraveyard = false
+        },
+        duplicateCard(card) {
+            let cardCopy = JSON.parse(JSON.stringify(card));
+            cardCopy.table_card_id = this.$root.$data.getCardId()
+            return cardCopy
+        },
+        cardFromPlayer(card) {
+            let index = this.player.cards.indexOf(card);
+            this.player.cards.splice(index, 1);
+        },
+        cardToPlayer(card, position) {
+            card.inGraveyard = false
+            if (position == undefined) {
+                position = this.player.cards.length
+            }
+            this.player.cards.splice(position, 0, card);
+        },
+        cardFromGraveyard(card) {
+            let index = this.player.graveyard.indexOf(card);
+            this.player.graveyard.splice(index, 1);
+        },
+        cardToGraveyard(card) {
+            card.inGraveyard = true
+            card.table_card_is_tapped = false
+            this.player.graveyard.splice(this.player.graveyard.length, 0, card)
         },
         doEditPlayerName() {
             this.editingPlayerName = true
@@ -451,6 +556,21 @@ export default {
     .v-input__slot {
         font-size: 1.3em;
     }
+}
+
+.player-graveyard-container {
+    display: flex;
+}
+
+.player-graveyard-container .v-overlay__content {
+    flex-basis: 40%;
+}
+
+.player-graveyard-container .graveyard_card_list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    max-height: 700px;
+    overflow-y: scroll;
 }
 
 </style>

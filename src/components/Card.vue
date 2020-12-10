@@ -43,18 +43,18 @@
                                 </div>
 
                                 <v-btn
-                                    v-show="closefn && hover"
+                                    v-show="closefn && hover && !$vuetify.breakpoint.mobile"
                                     icon
                                     x-small
                                     color="grey"
                                     class="close-btn"
-                                    @click="doClose"
+                                    @click.stop="showContextMenu"
                                 >
-                                    <v-icon>mdi-close-circle</v-icon>
+                                    <v-icon>mdi-menu</v-icon>
                                 </v-btn>
 
                                 <v-btn
-                                    v-show="closefn && hover && $vuetify.breakpoint.mobile"
+                                    v-show="closefn && $vuetify.breakpoint.mobile"
                                     icon
                                     x-small
                                     color="grey"
@@ -85,14 +85,25 @@
                             <v-list-item-group
                                 color="primary"
                             >
+                                <!-- Discard Card -->
+                                <v-list-item 
+                                    v-if="!carddata.inGraveyard"
+                                    @click="doClose"
+                                >
+                                    <v-list-item-title>Discard</v-list-item-title>
+                                </v-list-item>
+
                                 <!-- Duplicate Card -->
-                                <v-list-item v-if="duplicatefn != undefined" @click="doDuplicate">
+                                <v-list-item 
+                                    v-if="duplicatefn != undefined && !carddata.inGraveyard" 
+                                    @click="doDuplicate"
+                                >
                                     <v-list-item-title>Duplicate Card</v-list-item-title>
                                 </v-list-item>
 
                                 <!-- Toggle Counter -->
                                 <v-list-item 
-                                    v-if="duplicatefn != undefined" 
+                                    v-if="duplicatefn != undefined && !carddata.inGraveyard" 
                                     @click="doToggleCounter"
                                 >
                                     <v-list-item-title 
@@ -108,13 +119,22 @@
                                 </v-list-item>
 
                                 <!-- Create Tokens -->
-                                <v-list-item v-for="token in carddata.tokens" :key="token.id" @click="doCreateToken(token)">
+                                <div v-if="!carddata.inGraveyard && carddata.tokens">
+                                <v-list-item 
+                                    v-for="token in carddata.tokens" 
+                                    :key="token.id" 
+                                    @click="doCreateToken(token)"
+                                >
                                     <v-list-item-title>Create '{{ token.name }}' Token</v-list-item-title>
                                 </v-list-item>
+                                </div>
 
-                                <!-- Discard Card -->
-                                <v-list-item @click="doClose">
-                                    <v-list-item-title>Discard</v-list-item-title>
+                                <!-- Return Card to Play -->
+                                <v-list-item 
+                                    v-if="carddata.inGraveyard"
+                                    @click="doReturnToPlay"
+                                >
+                                    <v-list-item-title>Return to Play</v-list-item-title>
                                 </v-list-item>
 
                                 <!-- View on Gatherer -->
@@ -167,7 +187,8 @@ export default {
     props: {
         carddata: undefined,
         closefn: undefined,
-        duplicatefn: undefined
+        duplicatefn: undefined,
+        returntoplayfn: undefined,
     },
     components: {
         ManaCost,
@@ -216,8 +237,10 @@ export default {
             this.$root.$data.sendGameData()
         },
         doToggleTap() {
-            this.carddata.table_card_is_tapped = !this.carddata.table_card_is_tapped
-            this.$root.$data.sendGameData()
+            if (!this.carddata.inGraveyard) {
+                this.carddata.table_card_is_tapped = !this.carddata.table_card_is_tapped
+                this.$root.$data.sendGameData()
+            }
         },
         showContextMenu(event) {
             event.preventDefault()
@@ -262,6 +285,11 @@ export default {
                     console.log(err)
                     }
                 })
+        },
+        doReturnToPlay() {
+            if (this.returntoplayfn != undefined) {
+                this.returntoplayfn(this.carddata)
+            }
         }
     }
 }
