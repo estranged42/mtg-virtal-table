@@ -259,6 +259,9 @@
 
           <h3>Changelog</h3>
           <ul>
+            <li>2020-12-09: Added player graveyards. Discarded cards to go the graveyard, and can be returned to play.
+                New gravestone button in the Player toolbar.
+            </li>
             <li>2020-11-25: Add butons in the Player toolbar for tracking the current player's turn, and who's the Monarch.</li>
             <li>2020-11-24: Added 'Create Token' item to the Card context menu. Note that only newer cards seem to provide
                 the data required to make this work, so not all cards that create tokens will display this item. Try the 
