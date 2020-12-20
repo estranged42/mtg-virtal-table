@@ -143,7 +143,15 @@
                                     <v-list-item-title>View at Gatherer</v-list-item-title>
                                 </v-list-item>
                                 </a>
-                                
+
+                                <!-- Delete Card -->
+                                <v-list-item 
+                                    v-if="deletefn != undefined" 
+                                    @click="doDelete"
+                                >
+                                    <v-list-item-title>Delete Card</v-list-item-title>
+                                </v-list-item>
+
                             </v-list-item-group>
                         </v-list>
                     </v-menu>
@@ -189,6 +197,7 @@ export default {
         closefn: undefined,
         duplicatefn: undefined,
         returntoplayfn: undefined,
+        deletefn: undefined,
     },
     components: {
         ManaCost,
@@ -289,6 +298,11 @@ export default {
         doReturnToPlay() {
             if (this.returntoplayfn != undefined) {
                 this.returntoplayfn(this.carddata)
+            }
+        },
+        doDelete() {
+            if (this.deletefn != undefined) {
+                this.deletefn(this.carddata)
             }
         }
     }

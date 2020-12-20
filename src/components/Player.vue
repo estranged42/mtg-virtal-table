@@ -270,6 +270,7 @@
                             v-bind:carddata="item" 
                             :closefn="remove" 
                             :duplicatefn="onDuplicate"
+                            :deletefn="cardFromPlayer"
                         />
                         <Counter v-if="item.drag_type=='counter'" :counterdata="item" :closefn="remove"/>
                     </drag>
@@ -326,6 +327,7 @@
                             :closefn="remove" 
                             :duplicatefn="onDuplicate"
                             :returntoplayfn="onReturnToPlay"
+                            :deletefn="cardFromGraveyard"
                         />
                     </div>
                 </v-card>
