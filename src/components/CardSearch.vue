@@ -9,6 +9,7 @@
             ref="cardsearchfield"
             single-line
             hide-details
+            autocorrect="off"
         ></v-text-field>
 
         <div
