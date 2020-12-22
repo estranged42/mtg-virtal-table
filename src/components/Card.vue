@@ -217,7 +217,12 @@ export default {
 
         const regex = /({[0-9WBRGUTXC/]+})/g;
         let matches = this.carddata.oracle_text.match(regex)
-        this.oracle_text_enhanced = this.carddata.oracle_text
+
+        // Be sure to sanitize incoming oracle text before adding to the DOM, 
+        // as it can contain untrusted text. I'll let the browser's native DOMParser
+        // do this, and just extract the text results.
+        doc = new DOMParser.parseFromString(this.carddata.oracle_text, "text/html");
+        this.oracle_text_enhanced = doc.documentElement.textContent
         this.oracle_text_enhanced = this.oracle_text_enhanced.replace("\n", "<br>")
         if (matches) {
             for (let index = 0; index < matches.length; index++) {
