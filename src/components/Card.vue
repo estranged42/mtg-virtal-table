@@ -221,7 +221,8 @@ export default {
         // Be sure to sanitize incoming oracle text before adding to the DOM, 
         // as it can contain untrusted text. I'll let the browser's native DOMParser
         // do this, and just extract the text results.
-        doc = new DOMParser.parseFromString(this.carddata.oracle_text, "text/html");
+        var doc = new DOMParser().parseFromString(this.carddata.oracle_text, "text/html");
+        this.carddata.oracle_text = doc.documentElement.textContent
         this.oracle_text_enhanced = doc.documentElement.textContent
         this.oracle_text_enhanced = this.oracle_text_enhanced.replace("\n", "<br>")
         if (matches) {
