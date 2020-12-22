@@ -92,13 +92,13 @@
                         Active Player Button / Icon
                     -->
                     <v-tooltip 
-                        v-show="hover || player.is_active_player"
+                        v-show="hover || player.is_active_player || $vuetify.breakpoint.mobile"
                         bottom
                         open-delay="300"
                     >
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                                v-show="hover || player.is_active_player"
+                                v-show="hover || player.is_active_player || $vuetify.breakpoint.mobile"
                                 v-bind="attrs"
                                 v-on="on"
                                 icon
@@ -117,13 +117,13 @@
                         Monarch Button / Icon
                     -->
                     <v-tooltip 
-                        v-show="hover || player.is_monarch"
+                        v-show="hover || player.is_monarch || $vuetify.breakpoint.mobile"
                         bottom
                         open-delay="300"
                     >
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                                v-show="hover || player.is_monarch"
+                                v-show="hover || player.is_monarch || $vuetify.breakpoint.mobile"
                                 v-bind="attrs"
                                 v-on="on"
                                 icon
@@ -144,7 +144,7 @@
                         Untap All Button
                     -->
                     <v-tooltip 
-                        v-if="hover"
+                        v-show="hover || $vuetify.breakpoint.mobile"
                         bottom
                         open-delay="300"
                     >
@@ -152,6 +152,7 @@
                             <v-btn
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="hover || $vuetify.breakpoint.mobile"
                                 icon
                                 small
                                 @click.stop="doUntapAll"
@@ -166,7 +167,7 @@
                         Toggle Graveyard Button
                     -->
                     <v-tooltip 
-                        v-if="hover"
+                        v-show="hover || $vuetify.breakpoint.mobile"
                         bottom
                         open-delay="300"
                     >
@@ -174,6 +175,7 @@
                             <v-btn
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="hover || $vuetify.breakpoint.mobile"
                                 :disabled="player.graveyard.length == 0"
                                 icon
                                 small
@@ -189,7 +191,7 @@
                         Sort Cards Alphabetically
                     -->
                     <v-tooltip 
-                        v-if="hover"
+                        v-show="hover || $vuetify.breakpoint.mobile"
                         bottom
                         open-delay="300"
                     >
@@ -197,6 +199,7 @@
                             <v-btn
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="hover || $vuetify.breakpoint.mobile"
                                 icon
                                 small
                                 @click.stop="doSortCards('name')"
@@ -211,7 +214,7 @@
                         Sort Cards By Type
                     -->
                     <v-tooltip 
-                        v-if="hover"
+                        v-show="hover || $vuetify.breakpoint.mobile"
                         bottom
                         open-delay="300"
                     >
@@ -219,6 +222,7 @@
                             <v-btn
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="hover || $vuetify.breakpoint.mobile"
                                 icon
                                 small
                                 @click.stop="doSortCards('type')"
@@ -233,7 +237,7 @@
                         Delete Player Button
                     -->
                     <v-tooltip 
-                        v-if="hover"
+                        v-show="hover || $vuetify.breakpoint.mobile"
                         bottom
                         open-delay="300"
                     >
@@ -241,6 +245,7 @@
                             <v-btn
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="hover || $vuetify.breakpoint.mobile"
                                 icon
                                 small
                                 @click.stop="dialog = true"
