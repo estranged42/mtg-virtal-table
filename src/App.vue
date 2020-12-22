@@ -249,11 +249,12 @@
           <ul>
             <li>Duplicate Card - Makes a copy of this card and adds it to the player.</li>
             <li>Show Counter - Shows a configurable counter on the right side of the card.</li>
-            <li>Discard - Discard this card from the player. Same as clicking the close icon.</li>
+            <li>Discard - Discard this card from the player. Puts the card into the player's graveyard.</li>
             <li>Create 'X' Token - If the card supports creating tokens of various sorts, they will appear here. Not all 
                 cards that create tokens are supported in this way by the underlying Scryfall API. Newer cards seem to
                 be well supported, while older ones are not.</li>
             <li>View on Gatherer - Open a new tab to the gatherer.wizards.com entry for that card.</li>
+            <li>Delete Card - Delete the card from the player or graveyard.</li>
           </ul>
           </p>
 
