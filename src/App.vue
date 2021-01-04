@@ -240,8 +240,8 @@
 
           <p>
             If you hover over a card, a detail view with a full image of the card will appear. While hovering over a 
-            card, a close icon will appear in the upper right of the card. Clicking on this will discard the card from
-            the player. You can also click on a card to 'tap' and 'untap' it.
+            card, a menu icon will appear in the upper right of the card. Clicking on this will open the context menu. 
+            You can also click on a card to 'tap' and 'untap' it.
           </p>
           <p>
             There's also a context menu for each card that can be accessed by right-clicking on the card.
@@ -260,6 +260,7 @@
 
           <h3>Changelog</h3>
           <ul>
+            <li>2021-01-03: Fixed a bug with deleting cards not prpogating to other players.</li>
             <li>2020-12-09: Added player graveyards. Discarded cards to go the graveyard, and can be returned to play.
                 New gravestone button in the Player toolbar.
             </li>

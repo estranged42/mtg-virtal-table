@@ -275,7 +275,7 @@
                             v-bind:carddata="item" 
                             :closefn="remove" 
                             :duplicatefn="onDuplicate"
-                            :deletefn="cardFromPlayer"
+                            :deletefn="doDeleteFromPlayer"
                         />
                         <Counter v-if="item.drag_type=='counter'" :counterdata="item" :closefn="remove"/>
                     </drag>
@@ -332,7 +332,7 @@
                             :closefn="remove" 
                             :duplicatefn="onDuplicate"
                             :returntoplayfn="onReturnToPlay"
-                            :deletefn="cardFromGraveyard"
+                            :deletefn="doDeleteFromGraveyard"
                         />
                     </div>
                 </v-card>
@@ -441,6 +441,14 @@ export default {
         doDeletePlayer() {
             this.dialog = false
             this.$root.$data.deletePlayer(this.player)
+            this.$root.$data.sendGameData()
+        },
+        doDeleteFromPlayer(card) {
+            this.cardFromPlayer(card)
+            this.$root.$data.sendGameData()
+        },
+        doDeleteFromGraveyard(card) {
+            this.cardFromGraveyard(card)
             this.$root.$data.sendGameData()
         },
         doUntapAll() {
