@@ -31,6 +31,14 @@ var gamedata = {
     if (this.debug) console.log('setGameID triggered with', newValue)
     this.state.gameid = newValue
   },
+  disconnectFromGameID() {
+    // Update this browser's URL
+    if (_gamedata.debug) console.log("Not Connected. Clear URL.")
+    history.pushState({gamdid: null}, `MTG: VirtualTable`, "/")
+    this.state.gameid = "0000"
+    this.connected = false
+    this.connection = null
+  },
   getCardId() {
     let id = this.state.nextCardId
     this.state.nextCardId = id + 1
@@ -78,6 +86,9 @@ var gamedata = {
       let event_data = JSON.parse(event.data)
       let action = event_data.action
       if (event_data.error) {
+        if (event_data.connected == false) {
+          _gamedata.disconnectFromGameID()
+        }
         if (_gamedata.debug) console.log(event_data.error)
         _gamedata.alert(event_data.error)
       }
@@ -86,6 +97,8 @@ var gamedata = {
         _gamedata.state.gameid = event_data.gameid
         // Be sure to send over the game data after receiving host confirmation
         _gamedata.sendGameData()
+        // Update this browser's URL
+        history.pushState({gamdid: _gamedata.state.gameid}, `MTG: ${_gamedata.state.gameid}`, _gamedata.state.gameid)
         // Copy a game URL to the clipboard
         let document_url = new URL(document.location.href)
         _gamedata.gambetableurl = `${document_url.origin}/${_gamedata.state.gameid}`
@@ -101,6 +114,8 @@ var gamedata = {
         _gamedata.state = event_data.gamedata
         if (_gamedata.debug) console.log("joined game: " + _gamedata.state.gameid)
         _gamedata.alert(`Joine Game Table: ${_gamedata.state.gameid}`)
+        // Update this browser's URL
+        history.pushState({gamdid: _gamedata.state.gameid}, `MTG: ${_gamedata.state.gameid}`, _gamedata.state.gameid)
       } else if (action == "sendstate") {
         if (_gamedata.debug) console.log("confirm new state sent")
 

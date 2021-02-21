@@ -129,15 +129,23 @@
 
         <div v-if="$root.$data.connected">
           <v-card-title>
-            Connected to Game Table:
+            Connected to Game Table: {{ $root.$data.state.gameid }}
           </v-card-title>
 
           <v-card-subtitle>
-            <pre>{{ $root.$data.state.gameid }}</pre>
+            <pre>https://mtgvirtualtable.fischco.org/{{ $root.$data.state.gameid }}</pre>
+
+          <v-btn
+            color="primary"
+            @click="doDisconnect"
+          >
+            Disconnect
+          </v-btn>
           </v-card-subtitle>
+
         </div>
 
-        <v-expansion-panels focusable class="settings-panels">
+        <v-expansion-panels focusable class="settings-panels" v-if="!$root.$data.connected">
           <v-expansion-panel>
             <v-expansion-panel-header>Start a new game table</v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -260,6 +268,7 @@
 
           <h3>Changelog</h3>
           <ul>
+            <li>2021-02-21: Improved URL updating when joining/hosting tables.</li>
             <li>2021-01-03: Fixed a bug with deleting cards not prpogating to other players.</li>
             <li>2020-12-09: Added player graveyards. Discarded cards to go the graveyard, and can be returned to play.
                 New gravestone button in the Player toolbar.
@@ -387,6 +396,7 @@ export default {
     if (path.length > 1) {
       // path should be something like /XP1W so the split will result in ["", "XP1W"]
       let table_id = path.split('/')[1]
+      table_id = table_id.toUpperCase()
       const regex = /^[0-9A-Z]+$/;
       if (regex.test(table_id)) {
         this.$nextTick(() => {
@@ -424,8 +434,12 @@ export default {
     },
     doJoinGame() {
       this.$root.$data.checkWebSocketConnection()
+      this.$root.$data.state.gameid = this.$root.$data.state.gameid.toUpperCase()
       this.$root.$data.sendWebSocketMessage('join', this.$root.$data.state.gameid)
       this.settings = false
+    },
+    doDisconnect() {
+      this.$root.disconnectFromGameID()
     }
 
   }
