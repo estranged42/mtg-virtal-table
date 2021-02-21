@@ -9,7 +9,8 @@
     "deploy-aws": "scripts/deploy-aws.sh",
     "deploy-serverless": "scripts/deploy-serverless.sh",
     "invoke": "scripts/run-invoke.sh",
-    "publish": "scripts/publish.sh"
+    "publish": "scripts/publish.sh",
+    "local": "vue-cli-service serve"
   },
   "dependencies": {
     "blurhash": "^1.1.3",
