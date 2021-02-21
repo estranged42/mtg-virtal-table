@@ -300,7 +300,8 @@ def handler(event, context):
             game = get_game(gameid)
             if game is None:
                 resp = {
-                    "error": f'Could not join table {gameid}. Table does not exist, or has expired.'
+                    "error": f'Could not join table {gameid}. Table does not exist, or has expired.',
+                    "connected": False
                 }
                 send_socket_message(resp, connection_id, domain_name)
                 return _format_response(f'Invalid gameid {gameid}', 400)
